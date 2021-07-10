@@ -1,0 +1,9 @@
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+button {
+  font-style: oblique;
+}
