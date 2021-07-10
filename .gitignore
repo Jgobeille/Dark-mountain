@@ -4,6 +4,8 @@
 # Environment variables
 .env.local
 
+.env
+
 # Dependency directories
 node_modules
 
