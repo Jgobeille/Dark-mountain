@@ -4,6 +4,9 @@ import { useCart } from 'react-use-cart'
 import { formatCurrencyValue } from '@/utils/format-currency-value'
 import { GraphCMSSVG } from '@/svgs'
 import { ShoppingCartIcon } from '@/icons'
+
+import { GiHamburgerMenu } from 'react-icons/gi'
+
 import { useSettingsContext } from '@/context/settings'
 
 function Header({ pages = [] }) {
@@ -36,7 +39,7 @@ function Header({ pages = [] }) {
               ))}
             </ul>
           ) : null}
-          <div className="ml-auto">
+          <div className="ml-auto flex flex-row justify-evenly">
             <Link href="/cart">
               <a className="">
                 <ShoppingCartIcon
@@ -45,6 +48,9 @@ function Header({ pages = [] }) {
                 />
               </a>
             </Link>
+            <div>
+              <GiHamburgerMenu className="lg:hidden h-8 w-8 ml-4 text-black" />
+            </div>
           </div>
         </nav>
       </div>

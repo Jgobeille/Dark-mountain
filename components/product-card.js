@@ -10,7 +10,7 @@ function ProductCard({ id, images, name, price, slug }) {
   const [primaryImage] = images
 
   return (
-    <article className="border-4 border-black shadow-brutalist" key={id}>
+    <article className="border-4 border-black shadow-brutalist-lg" key={id}>
       <>
         <div className="text-left ml-2 mt-2 absolute z-10">
           <p className="text-black font-bold text-lg lg:text-xl">
