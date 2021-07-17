@@ -2,7 +2,7 @@ import React from 'react'
 import { Formik } from 'formik'
 
 const Form = () => (
-  <div className="flex flex-row">
+  <div className="flex flex-row justify-center">
     <Formik
       initialValues={{ name: '', email: '', message: '' }}
       validateOnChange={false}
@@ -106,7 +106,7 @@ const Form = () => (
           />
           <button
             type="submit"
-            className="border-4 shadow-brutalist-sm p-2 border-black"
+            className="border-4 shadow-brutalist-sm p-2 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out"
             disabled={isSubmitting}
           >
             SEND THAT SH*T

@@ -1,6 +1,8 @@
 import { CartProvider } from 'react-use-cart'
 
-import "../styles/styles.css";
+import Head from 'next/head'
+
+import '../styles/styles.css'
 import 'tailwindcss/tailwind.css'
 
 import { SettingsProvider } from '@/context/settings'

@@ -10,9 +10,12 @@ function ProductCard({ id, images, name, price, slug }) {
   const [primaryImage] = images
 
   return (
-    <article className="border-4 border-black shadow-brutalist-lg" key={id}>
+    <article
+      className="border-4 border-black shadow-brutalist-lg transform transition duration-500 lg:hover:shadow-brutalist-xl lg:hover:scale-110"
+      key={id}
+    >
       <>
-        <div className="text-left ml-2 mt-2 absolute z-10">
+        <div className="text-left ml-2 mt-2 absolute z-10 ">
           <p className="text-black font-bold text-lg lg:text-xl">
             {formatCurrencyValue({
               currency: activeCurrency,
@@ -32,7 +35,7 @@ function ProductCard({ id, images, name, price, slug }) {
           ) : null}
         </div>
         <div>
-          <button className="text-center py-2 w-full border-t-2 border-black">
+          <button className="hover:bg-black hover:text-white transition duration-300 ease-in-out text-center py-2 w-full border-t-2 border-black">
             ADD TO CART
           </button>
         </div>

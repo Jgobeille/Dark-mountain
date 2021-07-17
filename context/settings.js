@@ -23,6 +23,7 @@ function SettingsProvider({ children }) {
   )
   const [state, dispatch] = React.useReducer(reducer, savedSettings)
   const [hasMounted, setHasMounted] = React.useState(false)
+  const [active, setActive] = React.useState(true)
 
   const switchCurrency = (currency) =>
     dispatch({ type: 'SWITCH_CURRENCY', payload: currency })
@@ -41,7 +42,9 @@ function SettingsProvider({ children }) {
     <SettingsContext.Provider
       value={{
         ...state,
-        switchCurrency
+        switchCurrency,
+        active,
+        setActive
       }}
     >
       {children}

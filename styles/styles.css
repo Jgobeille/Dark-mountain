@@ -3,7 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  height: 100%;
+}
+#__next {
+  overflow: hidden;
+}
 body,
 button {
   font-style: oblique;
+}
+
+sidebar {
+  top: 7.8vh;
 }
