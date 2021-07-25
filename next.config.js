@@ -6,6 +6,6 @@ module.exports = withImages({
     defaultLocale: 'en'
   },
   images: {
-    domains: ['media.graphcms.com']
+    domains: ['media.graphcms.com', 'cdn.chec.io']
   }
 })

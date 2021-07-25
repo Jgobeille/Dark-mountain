@@ -29,19 +29,19 @@ function Sidebar() {
 
   return (
     <div
-      className={`sidebar absolute right-0 w-full md:w-1/2 bg-white lg:block lg:w-1/3 border-l-4 border-black z-50 h-full ${
+      className={`sidebar flex flex-col items-center absolute right-0 w-full md:w-1/2 bg-white lg:block lg:w-1/3 border-l-4 border-black z-40 h-full ${
         widthOutputNum < 1024 ? 'lg:block ' : ''
       }
        ${
          active
-           ? '  transform translate-x-0 transition-transform duration-500 '
-           : '  transform translate-x-full transition-transform duration-500 '
+           ? '  block transform translate-x-0 transition-transform duration-500 '
+           : ' invisible transform translate-x-full transition-transform duration-500 '
        } `}
     >
-      <div>
-        <Image src={Logo} height={700} width={700} alt="logo" title="logo" />
+      <div className="logo block">
+        <Image src={Logo} height={400} width={400} alt="logo" title="logo" />
       </div>
-      <div className="flex flex-column justify-around space px-24 pb-8">
+      <div className="flex flex-column justify-evenly space w-full pb-8">
         <RiInstagramFill className="text-3xl" />
         <RiFacebookBoxFill className="text-3xl" />
       </div>

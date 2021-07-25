@@ -12,13 +12,30 @@ body {
   height: 100%;
 }
 #__next {
-  overflow: hidden;
+  overflow-x: hidden;
 }
 body,
 button {
   font-style: oblique;
 }
 
+.title-link:hover,
+.logo:hover {
+  animation: tilt ease-in-out 0.5s;
+}
+
 sidebar {
-  top: 7.8vh;
+  top: 10vh;
+}
+
+@keyframes tilt {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
 }

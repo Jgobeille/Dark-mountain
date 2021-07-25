@@ -35,13 +35,13 @@ function Header({ pages = [] }) {
 
   return (
     <>
-      <header className="max-w-full mx-auto font-bold border-b-4 border-black px-4 sm:px-6">
+      <header className="max-w-full mx-auto font-bold border-b-4 border-black px-4 sm:px-6 ">
         <div className="py-3 w-full">
           <nav className="grid grid-cols-header items-end justify-items-center">
             <div className="filler"></div>
             <Link href="/">
-              <a className="text-xl md:text-2xl lg:text-3xl">
-                <h1 className="title">DARK MOUNTAIN CULT</h1>
+              <a className="title-link text-xl md:text-2xl lg:text-3xl ">
+                <h1 className="title-link">DARK MOUNTAIN CULT</h1>
               </a>
             </Link>
             {pages.length ? (
@@ -72,7 +72,7 @@ function Header({ pages = [] }) {
               <div>
                 <GiHamburgerMenu
                   onClick={() => setActive(!active)}
-                  className="lg:hidden h-8 w-8 ml-4 text-black"
+                  className="lg:hidden cursor-pointer h-8 w-8 ml-4 text-black"
                 />
               </div>
             </div>

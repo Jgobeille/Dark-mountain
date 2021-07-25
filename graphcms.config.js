@@ -12,11 +12,14 @@ module.exports = {
   ],
   currencies: [
     {
-      code: 'GBP',
-      default: true
+      code: 'GBP'
     },
     {
       code: 'EUR'
+    },
+    {
+      code: 'USD',
+      default: true
     }
   ]
 }

@@ -14,6 +14,26 @@ module.exports = {
       gridTemplateColumns: {
         // Simple 16 column grid
         header: '1fr 3fr 1fr'
+      },
+      keyframes: {
+        tilt: {
+          '0%': {
+            transform: 'rotate(0)'
+          },
+          '50%': {
+            transform: 'rotate(6deg)'
+          },
+          '100%': {
+            transform: 'rotate(0)'
+          }
+        }
+      },
+      tilt: ['hover'],
+      animation: {
+        tilt: 'tilt 1s ease-in-out infinite'
+      },
+      translate: {
+        '12Percent': '12%'
       }
     }
   },

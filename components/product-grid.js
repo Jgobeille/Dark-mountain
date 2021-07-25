@@ -1,4 +1,5 @@
 import ProductCard from '@/components/product-card'
+import Modal from '@/components/modal'
 
 function ProductGrid({ products }) {
   return (
@@ -11,6 +12,7 @@ function ProductGrid({ products }) {
       <div className=" gap-7 md:gap-14 grid sm:grid-cols-2 lg:grid-cols-3 px-10 md:px-20 py-10">
         {products.map(ProductCard)}
       </div>
+      <Modal />
     </div>
   )
 }

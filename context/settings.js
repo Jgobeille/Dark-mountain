@@ -25,6 +25,8 @@ function SettingsProvider({ children }) {
   const [hasMounted, setHasMounted] = React.useState(false)
   const [active, setActive] = React.useState(true)
 
+  const [modal, setModal] = React.useState(false)
+
   const switchCurrency = (currency) =>
     dispatch({ type: 'SWITCH_CURRENCY', payload: currency })
 
@@ -44,7 +46,9 @@ function SettingsProvider({ children }) {
         ...state,
         switchCurrency,
         active,
-        setActive
+        setActive,
+        modal,
+        setModal
       }}
     >
       {children}
