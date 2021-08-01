@@ -1,4 +1,4 @@
-import { CartProvider } from 'react-use-cart'
+import { CartProvider } from '@/context/cart.js'
 
 import Head from 'next/head'
 

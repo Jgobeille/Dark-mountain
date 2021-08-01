@@ -12,8 +12,7 @@ import Sidebar from './sidebar'
 import { useEffect, useState } from 'react'
 
 function Header({ pages = [] }) {
-  const { cartTotal } = useCart()
-  const { setActive, active } = useSettingsContext()
+  const { setActive, active, modal, setModal } = useSettingsContext()
 
   const [widthOutputNum, setWidthOutputNum] = useState()
 
@@ -61,14 +60,13 @@ function Header({ pages = [] }) {
               </ul>
             ) : null}
             <div className="ml-auto flex flex-row justify-evenly">
-              <Link href="/cart">
-                <a className="">
-                  <ShoppingCartIcon
-                    className="h-8 w-8 text-black"
-                    aria-hidden="true"
-                  />
-                </a>
-              </Link>
+              <div onClick={() => setModal(true)} className="">
+                <ShoppingCartIcon
+                  className="h-8 w-8 text-black"
+                  aria-hidden="true"
+                />
+              </div>
+
               <div>
                 <GiHamburgerMenu
                   onClick={() => setActive(!active)}

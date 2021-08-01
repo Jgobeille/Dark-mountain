@@ -4,8 +4,32 @@ import Image from 'next/image'
 import { formatCurrencyValue } from '@/utils/format-currency-value'
 import { useSettingsContext } from '@/context/settings'
 
+import commerce from '@/lib/commerce'
+import { useCartDispatch } from '@/context/cart'
+import { useCallback, useMemo, useState } from 'react'
+
 function ProductCard({ id, media, name, price, permalink }) {
-  const { activeCurrency } = useSettingsContext()
+  const {
+    activeCurrency,
+    addToCartStatus,
+    setAddToCartStatus
+  } = useSettingsContext()
+  const { setCart } = useCartDispatch()
+
+  console.log(addToCartStatus)
+
+  const addToCart = async (id) => {
+    try {
+      setAddToCartStatus({ id, message: 'ADDING TO CART...' })
+      const { cart } = await commerce.cart.add(id)
+      console.log(cart)
+
+      setAddToCartStatus({ id, message: 'ADDED TO CART!' })
+      setCart(cart)
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
 
   return (
     <article
@@ -47,8 +71,13 @@ function ProductCard({ id, media, name, price, permalink }) {
           </a>
         </Link>
         <div>
-          <button className="hover:bg-black hover:text-white transition duration-300 ease-in-out text-center py-2 w-full border-t-2 border-black">
-            ADD TO CART
+          <button
+            onClick={() => addToCart(id)}
+            className="hover:bg-black hover:text-white transition duration-300 ease-in-out text-center py-2 w-full border-t-2 border-black"
+          >
+            {id === addToCartStatus.id
+              ? addToCartStatus.message
+              : 'ADD TO CART'}
           </button>
         </div>
       </>

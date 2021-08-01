@@ -27,6 +27,11 @@ function SettingsProvider({ children }) {
 
   const [modal, setModal] = React.useState(false)
 
+  const [addToCartStatus, setAddToCartStatus] = React.useState({
+    id: '',
+    message: ''
+  })
+
   const switchCurrency = (currency) =>
     dispatch({ type: 'SWITCH_CURRENCY', payload: currency })
 
@@ -48,7 +53,9 @@ function SettingsProvider({ children }) {
         active,
         setActive,
         modal,
-        setModal
+        setModal,
+        addToCartStatus,
+        setAddToCartStatus
       }}
     >
       {children}
