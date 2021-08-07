@@ -4,10 +4,12 @@ import ProductGrid from '@/components/product-grid'
 import Sidebar from '@/components/sidebar'
 
 import commerce from '@/lib/commerce'
+import CheckoutForm from '@/components/checkout-container'
 function IndexPage({ products }) {
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-col">
       <ProductGrid products={products} />
+      <CheckoutForm />
       <Sidebar />
     </div>
   )

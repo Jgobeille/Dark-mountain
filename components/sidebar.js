@@ -34,8 +34,8 @@ function Sidebar() {
       }
        ${
          active
-           ? '  block transform translate-x-0 transition-transform duration-500 '
-           : ' invisible transform translate-x-full transition-transform duration-500 '
+           ? '  block '
+           : ' hidden '
        } `}
     >
       <div className="logo block">

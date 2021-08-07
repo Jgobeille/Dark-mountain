@@ -11,6 +11,9 @@ module.exports = {
       'brutalist-xl': '15px 15px 0px 0px #000000'
     },
     extend: {
+      screens: {
+        xs: { max: '400px' }
+      },
       gridTemplateColumns: {
         // Simple 16 column grid
         header: '1fr 3fr 1fr'
@@ -42,5 +45,5 @@ module.exports = {
       padding: ['first']
     }
   },
-  plugins: []
+  plugins: [require('@tailwindcss/forms')]
 }

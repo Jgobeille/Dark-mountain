@@ -16,13 +16,10 @@ function ProductCard({ id, media, name, price, permalink }) {
   } = useSettingsContext()
   const { setCart } = useCartDispatch()
 
-  console.log(addToCartStatus)
-
   const addToCart = async (id) => {
     try {
       setAddToCartStatus({ id, message: 'ADDING TO CART...' })
       const { cart } = await commerce.cart.add(id)
-      console.log(cart)
 
       setAddToCartStatus({ id, message: 'ADDED TO CART!' })
       setCart(cart)

@@ -32,6 +32,8 @@ function SettingsProvider({ children }) {
     message: ''
   })
 
+  const [checkoutToken, setCheckoutToken] = React.useState()
+
   const switchCurrency = (currency) =>
     dispatch({ type: 'SWITCH_CURRENCY', payload: currency })
 
@@ -55,7 +57,9 @@ function SettingsProvider({ children }) {
         modal,
         setModal,
         addToCartStatus,
-        setAddToCartStatus
+        setAddToCartStatus,
+        checkoutToken,
+        setCheckoutToken
       }}
     >
       {children}
