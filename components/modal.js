@@ -65,20 +65,50 @@ const Modal = () => {
     modal,
     setModal,
     setAddToCartStatus,
-    setCheckoutToken
+    setCheckoutToken,
+    shippingValues,
+    setShippingValues
   } = useSettingsContext()
   const { line_items, subtotal, id } = useCartState()
   const { setCart } = useCartDispatch()
 
   const handleUpdateCart = ({ cart }) => setCart(cart)
 
+  /**
+   * Fetches a list of countries available to ship to checkout token
+   * https://commercejs.com/docs/sdk/checkout#list-available-shipping-countries
+   *
+   * @param {string} dId
+   */
+  const fetchShippingCountries = (checkoutTokenId) => {
+    commerce.services
+      .localeListShippingCountries(checkoutTokenId)
+      .then((countries) => {
+        console.log(countries.countries)
+        setShippingValues({
+          ...shippingValues,
+          shippingCountries: countries.countries
+        })
+      })
+      .catch((error) => {
+        console.log(
+          'There was an error fetching a list of shipping countries',
+          error
+        )
+      })
+  }
+
   const generateCheckoutToken = () => {
     if (line_items.length) {
+      console.log(id)
+      //TODO: Rewrite as Async function
       commerce.checkout
         .generateToken(id, { type: 'cart' })
         .then((token) => {
           setCheckoutToken(token)
+          fetchShippingCountries(token.id)
         })
+
         .catch((error) => {
           console.log('There was an error in generating a token', error)
         })

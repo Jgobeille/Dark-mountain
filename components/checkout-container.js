@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import commerce from '@/lib/commerce'
 
 import { useSettingsContext } from '@/context/settings'
 import useForm from '@/utils/useForm'
+import { useCartDispatch, useCartState } from '@/context/cart'
 
 const CheckoutForm = () => {
-  const { checkoutToken } = useSettingsContext()
+  const {
+    checkoutToken,
+    shippingValues,
+    setShippingValues
+  } = useSettingsContext()
+  const { setCart } = useCartDispatch()
+  const { line_items } = useCartState()
   const { values, updateValue } = useForm({
     // Customer details
     firstName: 'Jane',
@@ -18,19 +25,184 @@ const CheckoutForm = () => {
     shippingCity: 'San Francisco',
     shippingStateProvince: 'CA',
     shippingPostalZipCode: '94107',
-    shippingCountry: 'US',
+    shippingCountry: '',
     // Payment details
     cardNum: '4242 4242 4242 4242',
     expMonth: '11',
     expYear: '2023',
     ccv: '123',
     billingPostalZipcode: '94107',
-    // Shipping and fulfillment data
-    shippingCountries: {},
-    shippingSubdivisions: {},
-    shippingOptions: [],
-    shippingOption: ''
+    order: ''
   })
+
+  const [order, setOrder] = useState()
+
+  /**
+   * Fetches the subdivisions (provinces/states) in a country which
+   * can be shipped to for the current checkout
+   * https://commercejs.com/docs/sdk/checkout#list-subdivisions
+   *
+   * @param {string} countryCode
+   */
+  const fetchSubdivisions = (countryCode) => {
+    commerce.services
+      .localeListSubdivisions(countryCode)
+      .then((subdivisions) => {
+        setShippingValues({
+          ...shippingValues,
+          shippingSubdivisions: subdivisions.subdivisions
+        })
+      })
+      .catch((error) => {
+        console.log('There was an error fetching the subdivisions', error)
+      })
+  }
+
+  /**
+   * Fetches the available shipping methods for the current checkout
+   * https://commercejs.com/docs/sdk/checkout#get-shipping-methods
+   *
+   * @param {string} checkoutTokenId
+   * @param {string} country
+   * @param {string} stateProvince
+   */
+  const fetchShippingOptions = (
+    checkoutToken,
+    country,
+    stateProvince = null
+  ) => {
+    commerce.checkout
+      .getShippingOptions(checkoutToken, {
+        country: country,
+        region: stateProvince
+      })
+      .then((options) => {
+        const shippingOption = options[0] || null
+        setShippingValues({
+          ...shippingValues,
+          shippingOptions: options,
+          shippingOption: shippingOption
+        })
+      })
+      .catch((error) => {
+        console.log('There was an error fetching the shipping methods', error)
+      })
+  }
+
+  const usePrevious = (value) => {
+    const ref = useRef()
+    useEffect(() => {
+      ref.current = value
+    })
+    return ref.current
+  }
+
+  const prevShipping = usePrevious(values.shippingCountry)
+
+  useEffect(() => {
+    fetchShippingOptions(checkoutToken?.id, values.shippingCountry)
+  }, [prevShipping])
+
+  const handleShippingCountryChange = (e) => {
+    const currentValue = e.target.value
+    console.log(currentValue)
+    fetchSubdivisions(currentValue)
+  }
+
+  const sanitizedLineItems = (lineItems) => {
+    return lineItems.reduce((data, lineItem) => {
+      const item = data
+      let variantData = null
+      if (lineItem.selected_options.length) {
+        variantData = {
+          [lineItem.selected_options[0].group_id]:
+            lineItem.selected_options[0].option_id
+        }
+      }
+      item[lineItem.id] = {
+        quantity: lineItem.quantity,
+        variants: variantData
+      }
+      return item
+    }, {})
+  }
+
+  const handleCaptureCheckout = (e) => {
+    e.preventDefault()
+    const orderData = {
+      line_items: sanitizedLineItems(line_items),
+      customer: {
+        firstname: values.firstName,
+        lastname: values.lastName,
+        email: values.email
+      },
+      shipping: {
+        name: values.shippingName,
+        street: values.shippingStreet,
+        town_city: values.shippingCity,
+        county_state: values.shippingStateProvince,
+        postal_zip_code: values.shippingPostalZipCode,
+        country: values.shippingCountry
+      },
+      billing: {
+        name: values.shippingName,
+        street: values.shippingStreet,
+        town_city: values.shippingCity,
+        county_state: values.shippingStateProvince,
+        postal_zip_code: values.shippingPostalZipCode,
+        country: values.shippingCountry
+      },
+      fulfillment: {
+        shipping_method: shippingValues.shippingOption.id
+      },
+      payment: {
+        gateway: 'test_gateway',
+        card: {
+          number: values.cardNum,
+          expiry_month: values.expMonth,
+          expiry_year: values.expYear,
+          cvc: values.ccv,
+          postal_zip_code: values.billingPostalZipcode
+        }
+      }
+    }
+    onCaptureCheckout(checkoutToken.id, orderData)
+  }
+
+  const refreshCart = () => {
+    commerce.cart
+      .refresh()
+      .then((newCart) => {
+        setCart(newCart)
+      })
+      .catch((error) => {
+        console.log('There was an error refreshing your cart', error)
+      })
+  }
+
+  /**
+   * Captures the checkout
+   * https://commercejs.com/docs/sdk/checkout#capture-order
+   *
+   * @param {string} checkoutTokenId The ID of the checkout token
+   * @param {object} newOrder The new order object data
+   */
+  const onCaptureCheckout = (checkoutTokenId, newOrder) => {
+    commerce.checkout
+      .capture(checkoutTokenId, newOrder)
+      .then((order) => {
+        // Save the order into state
+        setOrder(order)
+        // Clear the cart
+        refreshCart()
+        // Send the user to the receipt
+        window.sessionStorage.setItem('order_receipt', JSON.stringify(order))
+      })
+      .catch((error) => {
+        console.log('There was an error confirming your order', error)
+      })
+  }
+
   return (
     <>
       <div className="w-full lg:w-2/3 border-black">
@@ -109,21 +281,92 @@ const CheckoutForm = () => {
 
                         <div className="col-span-6 sm:col-span-3">
                           <label
-                            htmlFor="country"
-                            className="block text-sm font-medium text-gray-700"
+                            className="checkout__label"
+                            htmlFor="shippingCountry"
                           >
-                            Country / Region
+                            Country
                           </label>
                           <select
-                            id="country"
-                            name="country"
-                            autoComplete="country"
-                            onChange={updateValue}
-                            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            value={values.shippingCountry}
+                            name="shippingCountry"
+                            className="checkout__select"
+                            onChange={(e) => {
+                              updateValue(e)
+                              handleShippingCountryChange(e)
+                            }}
                           >
-                            <option>United States</option>
-                            <option>Canada</option>
-                            <option>Mexico</option>
+                            <option disabled>Country</option>
+                            {Object.keys(shippingValues.shippingCountries).map(
+                              (index) => {
+                                return (
+                                  <option value={index} key={index}>
+                                    {shippingValues.shippingCountries[index]}
+                                  </option>
+                                )
+                              }
+                            )}
+                            ;
+                          </select>
+                        </div>
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="checkout__label"
+                            htmlFor="shippingStateProvince"
+                          >
+                            State/province
+                          </label>
+                          <select
+                            value={values.shippingStateProvince}
+                            name="shippingStateProvince"
+                            className="checkout__select"
+                            onChange={updateValue}
+                          >
+                            <option className="checkout__option" disabled>
+                              State/province
+                            </option>
+                            {Object.keys(
+                              shippingValues.shippingSubdivisions
+                            ).map((index) => {
+                              return (
+                                <option value={index} key={index}>
+                                  {shippingValues.shippingSubdivisions[index]}
+                                </option>
+                              )
+                            })}
+                            ;
+                          </select>
+                        </div>
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="checkout__label"
+                            htmlFor="shippingOption"
+                          >
+                            Shipping method
+                          </label>
+                          <select
+                            value={shippingValues.shippingOption.id}
+                            name="shippingOption"
+                            className="checkout__select"
+                            // onChange={setShippingValues({ shippingOption })}
+                          >
+                            <option
+                              className="checkout__select-option"
+                              disabled
+                            >
+                              Select a shipping method
+                            </option>
+                            {shippingValues.shippingOptions.map(
+                              (method, index) => {
+                                return (
+                                  <option
+                                    className="checkout__select-option"
+                                    value={method.id}
+                                    key={index}
+                                  >{`${method.description} - $${method.price.formatted_with_code}`}</option>
+                                )
+                              }
+                            )}
+                            ;
                           </select>
                         </div>
 
@@ -282,6 +525,7 @@ const CheckoutForm = () => {
                 </form>
                 <div className="py-6 lg:col-span-2">
                   <button
+                    onClick={handleCaptureCheckout}
                     type="submit"
                     className="border-4 shadow-brutalist-sm p-2 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out"
                   >
