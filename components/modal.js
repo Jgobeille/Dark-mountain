@@ -68,7 +68,9 @@ const Modal = () => {
     setAddToCartStatus,
     setCheckoutToken,
     shippingValues,
-    setShippingValues
+    setShippingValues,
+    billingValues,
+    setBillingValues
   } = useSettingsContext()
   const { line_items, subtotal, id } = useCartState()
   const { setCart } = useCartDispatch()
@@ -99,6 +101,14 @@ const Modal = () => {
         setShippingValues,
         'shipping',
         countries.countries
+      )
+      fetchShippingOptionsAndSubdivisions(
+        checkoutTokenId,
+        'JP',
+        null,
+        billingValues,
+        setBillingValues,
+        'billing'
       )
     } catch (error) {
       console.log(

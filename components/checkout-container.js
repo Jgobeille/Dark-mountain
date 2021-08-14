@@ -8,7 +8,13 @@ import { useCartDispatch, useCartState } from '@/context/cart'
 import fetchShippingOptionsAndSubdivisions from '@/utils/fetchShippingOptionsAndSubdivisions'
 
 import { useFormik, Field } from 'formik'
+import * as Yup from 'yup'
+import valid from 'card-validator'
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
+
 const CheckoutForm = () => {
+  const stripe = useStripe()
+  const elements = useElements()
   const {
     checkoutToken,
     shippingValues,
@@ -47,8 +53,30 @@ const CheckoutForm = () => {
     }, {})
   }
 
-  const handleCaptureCheckout = (values) => {
+  const handleCaptureCheckout = async (values) => {
     // e.preventDefault()
+    if (!stripe || !elements) {
+      // Stripe.js has not loaded yet. Make sure to disable
+      // form submission until Stripe.js has loaded.
+      return
+    }
+
+    // Get a reference to a mounted CardElement. Elements knows how
+    // to find your CardElement because there can only ever be one of
+    // each type of element.
+    const cardElement = elements.getElement(CardElement)
+
+    // Use your card Element with other Stripe.js APIs
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement
+    })
+
+    if (error) {
+      console.log('[error]', error)
+    } else {
+      console.log('[PaymentMethod]', paymentMethod)
+    }
 
     const orderData = {
       line_items: sanitizedLineItems(line_items),
@@ -77,16 +105,14 @@ const CheckoutForm = () => {
         shipping_method: shippingValues.shippingOption.id
       },
       payment: {
-        gateway: 'test_gateway',
-        card: {
-          number: values.cardNum,
-          expiry_month: values.expMonth,
-          expiry_year: values.expYear,
-          cvc: values.ccv,
-          postal_zip_code: values.billingPostalZipcode
+        gateway: 'stripe',
+        stripe: {
+          payment_method_id: paymentMethod.id
         }
       }
     }
+
+    console.log(orderData)
     onCaptureCheckout(checkoutToken.id, orderData)
   }
 
@@ -155,6 +181,24 @@ const CheckoutForm = () => {
       billingPostalZipcode: '94107',
       billingAddress: ''
     },
+    validationSchema: Yup.object({
+      firstName: Yup.string().required('Required'),
+      lastName: Yup.string().required('Required'),
+      email: Yup.string().email('Invalid email address').required('Required'),
+      shippingStreet: Yup.string().required('Required'),
+      shippingCity: Yup.string().required('Required'),
+      shippingPostalZipCode: Yup.number().required('Required'),
+      billingStreet: Yup.string().required('Required'),
+      billingCity: Yup.string().required('Required'),
+      billingPostalZipCode: Yup.number().required('Required'),
+      cardNum: Yup.string()
+        .test(
+          'test-number', // this is used internally by yup
+          'Credit Card number is invalid', //validation message
+          (value) => valid.number(value).isValid
+        ) // return true false based on validation
+        .required()
+    }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2))
       handleCaptureCheckout(values)
@@ -220,8 +264,20 @@ const CheckoutForm = () => {
                             autoComplete="given-name"
                             value={formik.values.firstName}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.firstName
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.firstName &&
+                          formik.errors.firstName ? (
+                            <div className="text-red-500">
+                              {formik.errors.firstName}
+                            </div>
+                          ) : null}
                         </div>
 
                         <div className="col-span-6 sm:col-span-3">
@@ -233,8 +289,18 @@ const CheckoutForm = () => {
                             autoComplete="family-name"
                             value={formik.values.lastName}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.lastName
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.lastName && formik.errors.lastName ? (
+                            <div className="text-red-500">
+                              {formik.errors.lastName}
+                            </div>
+                          ) : null}
                         </div>
 
                         <div className="col-span-6">
@@ -246,8 +312,18 @@ const CheckoutForm = () => {
                             autoComplete="email"
                             value={formik.values.email}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.email
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.email && formik.errors.email ? (
+                            <div className="text-red-500">
+                              {formik.errors.email}
+                            </div>
+                          ) : null}
                         </div>
                         <div className="col-span-6">
                           <p className="font-bold text-lg">SHIPPING ADDRESS</p>
@@ -262,8 +338,19 @@ const CheckoutForm = () => {
                             autoComplete="shippingStreet"
                             value={formik.values.shippingStreet}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.shippingStreet
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.shippingStreet &&
+                          formik.errors.shippingStreet ? (
+                            <div className="text-red-500">
+                              {formik.errors.shippingStreet}
+                            </div>
+                          ) : null}
                         </div>
 
                         <div className="col-span-6 lg:col-span-3">
@@ -276,7 +363,10 @@ const CheckoutForm = () => {
                             id="apartment"
                             value={formik.values.apartment}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
+                            }
                           />
                         </div>
 
@@ -288,10 +378,21 @@ const CheckoutForm = () => {
                             id="shippingCity"
                             value={formik.values.shippingCity}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.shippingCity
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.shippingCity &&
+                          formik.errors.shippingCity ? (
+                            <div className="text-red-500">
+                              {formik.errors.shippingCity}
+                            </div>
+                          ) : null}
                         </div>
-                        <div className="col-span-6 sm:col-span-2">
+                        <div className="col-span-6 sm:col-span-3">
                           <label
                             className="checkout__label"
                             htmlFor="shippingCountry"
@@ -304,7 +405,10 @@ const CheckoutForm = () => {
                             type="text"
                             id=""
                             autoComplete=""
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
+                            }
                             onChange={(e) => {
                               formik.handleChange(e)
                               handleShippingCountryChange(e)
@@ -324,12 +428,12 @@ const CheckoutForm = () => {
                           </select>
                         </div>
 
-                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <div className="col-span-6 sm:col-span-3 ">
                           <label
                             className="checkout__label"
                             htmlFor="shippingStateProvince"
                           >
-                            State/province
+                            State/ Province
                           </label>
                           <select
                             value={formik.values.shippingStateProvince}
@@ -338,7 +442,10 @@ const CheckoutForm = () => {
                             id="shippingStateProvince"
                             autoComplete="shippingStateProvince"
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
+                            }
                           >
                             <option className="checkout__option" disabled>
                               State / Province
@@ -358,7 +465,7 @@ const CheckoutForm = () => {
 
                         <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                           <label htmlFor="shippingPostalZipCode">
-                            ZIP / Postal
+                            Postal Code
                           </label>
                           <input
                             type="text"
@@ -367,8 +474,19 @@ const CheckoutForm = () => {
                             autoComplete="shippingPostalZipCode"
                             value={formik.values.shippingPostalZipCode}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.shippingPostalZipCode
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.shippingPostalZipCode &&
+                          formik.errors.shippingPostalZipCode ? (
+                            <div className="text-red-500">
+                              {formik.errors.shippingPostalZipCode}
+                            </div>
+                          ) : null}
                         </div>
                         <div className="col-span-6">
                           <p className="font-bold text-lg">BILLING ADDRESS</p>
@@ -387,6 +505,7 @@ const CheckoutForm = () => {
                             <label htmlFor="billingAddress">
                               <input
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                                 type="radio"
                                 name="billingAddress"
                                 value="same"
@@ -396,6 +515,7 @@ const CheckoutForm = () => {
                             <label htmlFor="billingAddress">
                               <input
                                 onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
                                 type="radio"
                                 name="billingAddress"
                                 value="different"
@@ -414,8 +534,19 @@ const CheckoutForm = () => {
                             autoComplete="billingStreet"
                             value={formik.values.billingStreet}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.billingStreet
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.billingStreet &&
+                          formik.errors.billingStreet ? (
+                            <div className="text-red-500">
+                              {formik.errors.billingStreet}
+                            </div>
+                          ) : null}
                         </div>
 
                         <div className="col-span-6 lg:col-span-3">
@@ -428,7 +559,10 @@ const CheckoutForm = () => {
                             id="apartment"
                             value={formik.values.apartment}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
+                            }
                           />
                         </div>
 
@@ -440,10 +574,21 @@ const CheckoutForm = () => {
                             id="billingCity"
                             value={formik.values.billingCity}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.billingCity
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.billingCity &&
+                          formik.errors.billingCity ? (
+                            <div className="text-red-500">
+                              {formik.errors.billingCity}
+                            </div>
+                          ) : null}
                         </div>
-                        <div className="col-span-6 sm:col-span-2">
+                        <div className="col-span-6 sm:col-span-3">
                           <label
                             className="checkout__label"
                             htmlFor="billingCountry"
@@ -456,7 +601,10 @@ const CheckoutForm = () => {
                             type="text"
                             id=""
                             autoComplete=""
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
+                            }
                             onChange={(e) => {
                               formik.handleChange(e)
                               handleBillingCountryChange(e)
@@ -476,7 +624,7 @@ const CheckoutForm = () => {
                           </select>
                         </div>
 
-                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                        <div className="col-span-6 sm:col-span-3 lg:col-span-3">
                           <label
                             className="checkout__label"
                             htmlFor="billingStateProvince"
@@ -490,7 +638,10 @@ const CheckoutForm = () => {
                             id="billingStateProvince"
                             autoComplete="billingStateProvince"
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
+                            }
                           >
                             <option className="checkout__option" disabled>
                               State / Province
@@ -510,7 +661,7 @@ const CheckoutForm = () => {
 
                         <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                           <label htmlFor="billingPostalZipCode">
-                            ZIP / Postal
+                            Postal Code
                           </label>
                           <input
                             type="text"
@@ -519,8 +670,19 @@ const CheckoutForm = () => {
                             autoComplete="billingPostalZipCode"
                             value={formik.values.billingPostalZipCode}
                             onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            onBlur={formik.handleBlur}
+                            className={
+                              formik.errors.billingPostalZipCode
+                                ? 'block w-full shadow-sm sm:text-sm border-4 border-red-500 mb-2 '
+                                : 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black'
+                            }
                           />
+                          {formik.touched.billingPostalZipCode &&
+                          formik.errors.billingPostalZipCode ? (
+                            <div className="text-red-500">
+                              {formik.errors.billingPostalZipCode}
+                            </div>
+                          ) : null}
                         </div>
                         <div className="col-span-6">
                           <p className="font-bold text-lg">SHIPPING METHOD</p>
@@ -533,11 +695,14 @@ const CheckoutForm = () => {
                           <select
                             value={shippingValues.shippingOption.id}
                             name="shippingOption"
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                            className={
+                              'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
+                            }
                             type="text"
                             id="shippingOption"
                             autoComplete="shippingOption"
                             // onChange={setShippingValues({ shippingOption })}
+                            onBlur={formik.handleBlur}
                           >
                             <option
                               className="checkout__select-option"
@@ -562,66 +727,25 @@ const CheckoutForm = () => {
                         <div className="col-span-6">
                           <p className="font-bold text-lg">PAYMENT</p>
                         </div>
-                        <div className="lg:col-span-5">
-                          <label htmlFor="cardNum">Card Number</label>
-                          <input
-                            type="text"
-                            name="cardNum"
-                            id="cardNum"
-                            autoComplete="cardNum"
-                            value={formik.values.cardNum}
-                            onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
-                          />
-                        </div>
-                        <div className=" col-span-6 sm:col-span-1">
-                          <label htmlFor="ccv">CCV</label>
-                          <input
-                            type="number"
-                            name="ccv"
-                            id="ccv"
-                            autoComplete="ccv"
-                            value={formik.values.ccv}
-                            onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
-                          />
-                        </div>
-                        <div className="col-span-6 sm:col-span-2">
-                          <label htmlFor="expMonth">Month</label>
-                          <input
-                            type="number"
-                            name="expMonth"
-                            id="expMonth"
-                            min="1"
-                            max="12"
-                            autoComplete="expMonth"
-                            value={formik.values.expMonth}
-                            onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
-                          />
-                        </div>
-                        <div className="col-span-6 sm:col-span-2">
-                          <label htmlFor="expYear">Year</label>
-                          <input
-                            type="number"
-                            name="expYear"
-                            id="expYear"
-                            value={formik.values.expYear}
-                            onChange={formik.handleChange}
-                            autoComplete="expYear"
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
-                          />
-                        </div>
-                        <div className="col-span-6 sm:col-span-2">
-                          <label htmlFor="billingPostalZipcode">Zip Code</label>
-                          <input
-                            type="number"
-                            name="billingPostalZipcode"
-                            id="billingPostalZipcode"
-                            autoComplete="billingPostalZipcode"
-                            value={formik.values.billingPostalZipcode}
-                            onChange={formik.handleChange}
-                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black "
+                        <div className="col-span-6">
+                          <CardElement
+                            className={
+                              'p-4 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
+                            }
+                            options={{
+                              style: {
+                                base: {
+                                  fontSize: '16px',
+                                  color: '#424770',
+                                  '::placeholder': {
+                                    color: '#000000'
+                                  }
+                                },
+                                invalid: {
+                                  color: '#9e2146'
+                                }
+                              }
+                            }}
                           />
                         </div>
                       </div>
