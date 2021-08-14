@@ -2,6 +2,7 @@ const { useSettingsContext } = require('@/context/settings')
 
 import { useCartDispatch, useCartState } from '@/context/cart'
 import commerce from '@/lib/commerce'
+import fetchShippingOptionsAndSubdivisions from '@/utils/fetchShippingOptionsAndSubdivisions'
 import { useCallback, useState } from 'react'
 
 const CartItem = ({ id, name, quantity, line_total, media }) => {
@@ -80,38 +81,48 @@ const Modal = () => {
    *
    * @param {string} dId
    */
-  const fetchShippingCountries = (checkoutTokenId) => {
-    commerce.services
-      .localeListShippingCountries(checkoutTokenId)
-      .then((countries) => {
-        console.log(countries.countries)
-        setShippingValues({
-          ...shippingValues,
-          shippingCountries: countries.countries
-        })
+  const fetchShippingCountries = async (checkoutTokenId) => {
+    try {
+      const countries = await commerce.services.localeListShippingCountries(
+        checkoutTokenId
+      )
+      setShippingValues({
+        ...shippingValues,
+        shippingCountries: countries.countries
       })
-      .catch((error) => {
-        console.log(
-          'There was an error fetching a list of shipping countries',
-          error
-        )
-      })
+
+      fetchShippingOptionsAndSubdivisions(
+        checkoutTokenId,
+        'JP',
+        null,
+        shippingValues,
+        setShippingValues,
+        'shipping',
+        countries.countries
+      )
+    } catch (error) {
+      console.log(
+        'There was an error fetching a list of shipping countries',
+        error
+      )
+    }
   }
 
-  const generateCheckoutToken = () => {
+  const generateCheckoutToken = async () => {
     if (line_items.length) {
       console.log(id)
       //TODO: Rewrite as Async function
-      commerce.checkout
-        .generateToken(id, { type: 'cart' })
-        .then((token) => {
-          setCheckoutToken(token)
-          fetchShippingCountries(token.id)
+
+      try {
+        const token = await commerce.checkout.generateToken(id, {
+          type: 'cart'
         })
 
-        .catch((error) => {
-          console.log('There was an error in generating a token', error)
-        })
+        setCheckoutToken(token)
+        fetchShippingCountries(token.id)
+      } catch (error) {
+        console.log('There was an error in generating a token', error)
+      }
     }
   }
 

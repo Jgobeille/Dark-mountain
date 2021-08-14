@@ -41,6 +41,13 @@ function SettingsProvider({ children }) {
     shippingOptions: [],
     shippingOption: ''
   })
+  const [billingValues, setBillingValues] = React.useState({
+    // Shipping and fulfillment data
+    billingCountries: {},
+    billingSubdivisions: {},
+    billingOptions: [],
+    billingOption: ''
+  })
 
   const switchCurrency = (currency) =>
     dispatch({ type: 'SWITCH_CURRENCY', payload: currency })
@@ -69,7 +76,9 @@ function SettingsProvider({ children }) {
         checkoutToken,
         setCheckoutToken,
         shippingValues,
-        setShippingValues
+        setShippingValues,
+        billingValues,
+        setBillingValues
       }}
     >
       {children}

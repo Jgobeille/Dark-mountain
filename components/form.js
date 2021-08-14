@@ -8,7 +8,6 @@ const Form = () => (
       validateOnChange={false}
       validateOnBlur={false}
       validate={(values) => {
-        console.log(values)
         const errors = {}
         if (!values.name) {
           errors.name = 'Please enter your name!'
