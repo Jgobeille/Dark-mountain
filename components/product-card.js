@@ -36,8 +36,8 @@ function ProductCard({ id, media, name, price, permalink }) {
         setShippingValues,
         billingValues,
         setBillingValues,
-        line_items,
-        id
+        cart.line_items,
+        cart.id
       )
     } catch (error) {
       console.error(error.message)

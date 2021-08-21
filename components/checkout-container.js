@@ -75,10 +75,12 @@ const CheckoutForm = () => {
     })
 
     if (error) {
-      setErrors([...errors, error.message])
+      setErrors([''])
+      setErrors([error.message])
       return
     } else {
-      setErrors([])
+      console.log('no errors')
+      setErrors([''])
     }
     let orderData
     if (values.billingAddress === 'same') {
@@ -191,7 +193,7 @@ const CheckoutForm = () => {
           allErrors.push(value[0])
         }
 
-        setErrors([...errors, ...allErrors])
+        setErrors([...allErrors])
       })
   }
 
@@ -257,8 +259,6 @@ const CheckoutForm = () => {
       'billing'
     )
   }
-
-  console.log(errors)
 
   const prevShipping = usePrevious(formik.values.shippingCountry)
 
@@ -813,19 +813,24 @@ const CheckoutForm = () => {
                               }}
                             />
                           </div>
-                          <div className="col-span-6">
-                            <div className="mt-8 py-4 px-2 block w-full border-4  border-red-500">
-                              <p className="text-lg">
-                                There was an error when submitting your
-                                purchase. Please check the errors and try again.
-                              </p>
-                              <ul className="mt-2">
-                                {errors.map((error) => (
-                                  <li className="text-red-500">{error}</li>
-                                ))}
-                              </ul>
+                          {errors.length >= 1 ? (
+                            <div className="col-span-6">
+                              <div className="mt-8 py-4 px-2 block w-full border-4  border-red-500">
+                                <p className="text-lg">
+                                  There was an error when submitting your
+                                  purchase. Please check the errors and try
+                                  again.
+                                </p>
+                                <ul className="mt-2">
+                                  {errors.map((error) => (
+                                    <li className="text-red-500">{error}</li>
+                                  ))}
+                                </ul>
+                              </div>
                             </div>
-                          </div>
+                          ) : (
+                            ''
+                          )}
                         </div>
                         <div className="mt-8 py-4 px-2 block w-full border-4  border-black">
                           {line_items.map((line_item) => (

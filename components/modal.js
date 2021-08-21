@@ -6,9 +6,30 @@ import fetchShippingOptionsAndSubdivisions from '@/utils/fetchShippingOptionsAnd
 import generateCheckoutToken from '@/utils/generateCheckoutToken'
 
 const CartItem = ({ id, name, quantity, line_total, media }) => {
+  const {
+    setCheckoutToken,
+    shippingValues,
+    setShippingValues,
+    billingValues,
+    setBillingValues
+  } = useSettingsContext()
+  const { line_items } = useCartState()
   const { setCart } = useCartDispatch()
 
-  const handleUpdateCart = ({ cart }) => setCart(cart)
+  const handleUpdateCart = ({ cart }) => {
+    console.log(id)
+    console.log(cart)
+    setCart(cart)
+    generateCheckoutToken(
+      setCheckoutToken,
+      shippingValues,
+      setShippingValues,
+      billingValues,
+      setBillingValues,
+      cart.line_items,
+      cart.id
+    )
+  }
 
   const removeItem = () => commerce.cart.remove(id).then(handleUpdateCart)
   const decrementQuantity = () => {
@@ -77,7 +98,18 @@ const Modal = () => {
   const { line_items, subtotal, id } = useCartState()
   const { setCart } = useCartDispatch()
 
-  const handleUpdateCart = ({ cart }) => setCart(cart)
+  const handleUpdateCart = ({ cart }) => {
+    generateCheckoutToken(
+      setCheckoutToken,
+      shippingValues,
+      setShippingValues,
+      billingValues,
+      setBillingValues,
+      cart.line_items,
+      cart.id
+    )
+    setCart(cart)
+  }
   const executeScroll = () => {
     setTimeout(() => {
       checkoutRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -90,7 +122,6 @@ const Modal = () => {
 
   const emptyCart = () => {
     setAddToCartStatus('ADD TO CART')
-
     commerce.cart.empty().then(handleUpdateCart)
   }
 
@@ -147,7 +178,15 @@ const Modal = () => {
               </button>
               <button
                 onClick={() => {
-                  generateCheckoutToken()
+                  generateCheckoutToken(
+                    setCheckoutToken,
+                    shippingValues,
+                    setShippingValues,
+                    billingValues,
+                    setBillingValues,
+                    line_items,
+                    id
+                  )
                   setCheckoutInitialized(true)
                   executeScroll()
                   setModal(false)

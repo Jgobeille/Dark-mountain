@@ -59,6 +59,7 @@ const generateCheckoutToken = async (
   line_items,
   id
 ) => {
+  console.log(line_items)
   if (line_items.length) {
     try {
       const token = await commerce.checkout.generateToken(id, {
