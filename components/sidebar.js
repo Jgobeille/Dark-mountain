@@ -32,14 +32,10 @@ function Sidebar() {
       className={`sidebar flex flex-col items-center absolute right-0 w-full md:w-1/2 bg-white lg:block lg:w-1/3 border-l-4 border-black z-40 h-full ${
         widthOutputNum < 1024 ? 'lg:block ' : ''
       }
-       ${
-         active
-           ? '  block '
-           : ' hidden '
-       } `}
+       ${active ? '  block ' : ' hidden '} `}
     >
       <div className="logo block">
-        <Image src={Logo} height={400} width={400} alt="logo" title="logo" />
+        <Image src={Logo} height={600} width={600} alt="logo" title="logo" />
       </div>
       <div className="flex flex-column justify-evenly space w-full pb-8">
         <RiInstagramFill className="text-3xl" />

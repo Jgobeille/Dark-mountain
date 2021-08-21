@@ -26,6 +26,8 @@ function SettingsProvider({ children }) {
   const [active, setActive] = React.useState(true)
 
   const [modal, setModal] = React.useState(false)
+  const [checkoutInitialized, setCheckoutInitialized] = React.useState(false)
+  const checkoutRef = React.useRef(null)
 
   const [addToCartStatus, setAddToCartStatus] = React.useState({
     id: '',
@@ -78,7 +80,10 @@ function SettingsProvider({ children }) {
         shippingValues,
         setShippingValues,
         billingValues,
-        setBillingValues
+        setBillingValues,
+        checkoutInitialized,
+        setCheckoutInitialized,
+        checkoutRef
       }}
     >
       {children}

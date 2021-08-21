@@ -5,24 +5,40 @@ import { formatCurrencyValue } from '@/utils/format-currency-value'
 import { useSettingsContext } from '@/context/settings'
 
 import commerce from '@/lib/commerce'
-import { useCartDispatch } from '@/context/cart'
-import { useCallback, useMemo, useState } from 'react'
+import { useCartDispatch, useCartState } from '@/context/cart'
+import generateCheckoutToken from '@/utils/generateCheckoutToken'
 
 function ProductCard({ id, media, name, price, permalink }) {
   const {
     activeCurrency,
     addToCartStatus,
-    setAddToCartStatus
+    setAddToCartStatus,
+    setCheckoutToken,
+    shippingValues,
+    setShippingValues,
+    billingValues,
+    setBillingValues
   } = useSettingsContext()
+  const { line_items } = useCartState()
   const { setCart } = useCartDispatch()
 
   const addToCart = async (id) => {
+    console.log(id)
     try {
       setAddToCartStatus({ id, message: 'ADDING TO CART...' })
       const { cart } = await commerce.cart.add(id)
 
       setAddToCartStatus({ id, message: 'ADDED TO CART!' })
       setCart(cart)
+      generateCheckoutToken(
+        setCheckoutToken,
+        shippingValues,
+        setShippingValues,
+        billingValues,
+        setBillingValues,
+        line_items,
+        id
+      )
     } catch (error) {
       console.error(error.message)
     }

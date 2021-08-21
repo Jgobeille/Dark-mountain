@@ -3,7 +3,7 @@ const { useSettingsContext } = require('@/context/settings')
 import { useCartDispatch, useCartState } from '@/context/cart'
 import commerce from '@/lib/commerce'
 import fetchShippingOptionsAndSubdivisions from '@/utils/fetchShippingOptionsAndSubdivisions'
-import { useCallback, useState } from 'react'
+import generateCheckoutToken from '@/utils/generateCheckoutToken'
 
 const CartItem = ({ id, name, quantity, line_total, media }) => {
   const { setCart } = useCartDispatch()
@@ -70,70 +70,18 @@ const Modal = () => {
     shippingValues,
     setShippingValues,
     billingValues,
-    setBillingValues
+    setBillingValues,
+    setCheckoutInitialized,
+    checkoutRef
   } = useSettingsContext()
   const { line_items, subtotal, id } = useCartState()
   const { setCart } = useCartDispatch()
 
   const handleUpdateCart = ({ cart }) => setCart(cart)
-
-  /**
-   * Fetches a list of countries available to ship to checkout token
-   * https://commercejs.com/docs/sdk/checkout#list-available-shipping-countries
-   *
-   * @param {string} dId
-   */
-  const fetchShippingCountries = async (checkoutTokenId) => {
-    try {
-      const countries = await commerce.services.localeListShippingCountries(
-        checkoutTokenId
-      )
-      setShippingValues({
-        ...shippingValues,
-        shippingCountries: countries.countries
-      })
-
-      fetchShippingOptionsAndSubdivisions(
-        checkoutTokenId,
-        'JP',
-        null,
-        shippingValues,
-        setShippingValues,
-        'shipping',
-        countries.countries
-      )
-      fetchShippingOptionsAndSubdivisions(
-        checkoutTokenId,
-        'JP',
-        null,
-        billingValues,
-        setBillingValues,
-        'billing'
-      )
-    } catch (error) {
-      console.log(
-        'There was an error fetching a list of shipping countries',
-        error
-      )
-    }
-  }
-
-  const generateCheckoutToken = async () => {
-    if (line_items.length) {
-      console.log(id)
-      //TODO: Rewrite as Async function
-
-      try {
-        const token = await commerce.checkout.generateToken(id, {
-          type: 'cart'
-        })
-
-        setCheckoutToken(token)
-        fetchShippingCountries(token.id)
-      } catch (error) {
-        console.log('There was an error in generating a token', error)
-      }
-    }
+  const executeScroll = () => {
+    setTimeout(() => {
+      checkoutRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
   }
 
   const isEmpty = line_items.length === 0
@@ -198,7 +146,12 @@ const Modal = () => {
                 CLEAR CART
               </button>
               <button
-                onClick={generateCheckoutToken}
+                onClick={() => {
+                  generateCheckoutToken()
+                  setCheckoutInitialized(true)
+                  executeScroll()
+                  setModal(false)
+                }}
                 type="button"
                 className="text-lg border-4 p-1 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out"
               >
