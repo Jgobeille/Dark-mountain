@@ -21,10 +21,6 @@ function Header({ pages = [] }) {
 
     setWidthOutputNum(widthOutput)
 
-    if (widthOutput > 1020) {
-      setActive(true)
-    }
-
     return widthOutput
   }
 

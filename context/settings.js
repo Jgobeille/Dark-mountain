@@ -23,7 +23,7 @@ function SettingsProvider({ children }) {
   )
   const [state, dispatch] = React.useReducer(reducer, savedSettings)
   const [hasMounted, setHasMounted] = React.useState(false)
-  const [active, setActive] = React.useState(true)
+  const [active, setActive] = React.useState(false)
 
   const [modal, setModal] = React.useState(false)
   const [checkoutInitialized, setCheckoutInitialized] = React.useState(false)
@@ -35,6 +35,7 @@ function SettingsProvider({ children }) {
   })
 
   const [checkoutToken, setCheckoutToken] = React.useState()
+  const [order, setOrder] = React.useState()
 
   const [shippingValues, setShippingValues] = React.useState({
     // Shipping and fulfillment data
@@ -83,7 +84,9 @@ function SettingsProvider({ children }) {
         setBillingValues,
         checkoutInitialized,
         setCheckoutInitialized,
-        checkoutRef
+        checkoutRef,
+        order,
+        setOrder
       }}
     >
       {children}

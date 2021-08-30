@@ -12,6 +12,55 @@ import * as Yup from 'yup'
 
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 
+const ThankyouPage = () => {
+  const { order, setOrder, setCheckoutInitialized } = useSettingsContext()
+
+  console.log(order);
+  return (
+    <>
+      <div className="border-b-4  border-t-4 border-black w-full lg:w-2/3">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold  ml-8 m-2">
+          CHECKOUT
+        </h1>
+      </div>
+      <div className="px-10 md:px-20 py-10 w-full lg:w-2/3">
+      <h2 className="text-xl mb-4">Thank you for your order! </h2>
+      <p className="text-xl mb-4">
+        your order has been placed. You should be receiving a confirmation email
+        soon about your order
+      </p>
+
+      <div className="my-4 p-4  w-full border-4  border-black">
+      <div className="flex flex-row justify-between mb-2 ">
+        <p className="text-lg">ORDER REF </p>
+        <p className="text-lg">{order.id}</p>
+      </div>
+
+      <div>
+        {order.order.line_items.map(lineItem => (
+          <div className="flex flex-row justify-between mb-2 ">
+              <p className="text-lg">{lineItem.product_name}</p>
+              <p className="text-lg">{lineItem.price.formatted_with_symbol}</p>
+          </div>
+        )
+        )}
+      </div>
+      <div className="flex flex-row justify-between mb-2 ">
+        <p className="text-lg">SHIPPING</p>
+        <p className="text-lg">{order.order.shipping.price.formatted_with_symbol}</p>
+      </div>
+      </div>
+
+
+      <button className="border-4 shadow-brutalist-sm p-2 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out" onClick={() => { 
+        setOrder()
+        setCheckoutInitialized()
+        }}>BUY AGAIN</button>
+      </div>
+    </>
+  )
+}
+
 const CheckoutForm = () => {
   const stripe = useStripe()
   const elements = useElements()
@@ -22,13 +71,15 @@ const CheckoutForm = () => {
     billingValues,
     setBillingValues,
     checkoutInitialized,
-    checkoutRef
+    setCheckoutInitialized,
+    checkoutRef,
+    order,
+    setOrder
   } = useSettingsContext()
   const { setCart } = useCartDispatch()
   const { line_items, subtotal } = useCartState()
 
-  const [order, setOrder] = useState()
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState()
 
   const usePrevious = (value) => {
     const ref = useRef()
@@ -75,12 +126,11 @@ const CheckoutForm = () => {
     })
 
     if (error) {
-      setErrors([''])
+      setErrors()
       setErrors([error.message])
       return
     } else {
-      console.log('no errors')
-      setErrors([''])
+      setErrors()
     }
     let orderData
     if (values.billingAddress === 'same') {
@@ -180,6 +230,7 @@ const CheckoutForm = () => {
       .then((order) => {
         // Save the order into state
         setOrder(order)
+        
         // Clear the cart
         refreshCart()
         // Send the user to the receipt
@@ -189,11 +240,17 @@ const CheckoutForm = () => {
         const allErrors = []
 
         // Loop through object properties
-        for (const [key, value] of Object.entries(error.data.error.errors)) {
-          allErrors.push(value[0])
-        }
+        if (error.data.error.errors) {
+          for (const [key, value] of Object.entries(error.data.error.errors)) {
+            allErrors.push(value[0])
+          }
 
-        setErrors([...allErrors])
+          if (error.data.error.message) {
+            allErrors.push(error.data.error.message)
+          }
+
+          setErrors([...allErrors])
+        }
       })
   }
 
@@ -212,7 +269,8 @@ const CheckoutForm = () => {
       shippingCity: 'San Francisco',
       shippingStateProvince: 'CA',
       shippingPostalZipCode: '94107',
-      shippingCountry: '',
+      shippingCountry: 'US',
+      billingAddress: 'same',
       billingName: 'Jane Doe',
       billingStreet: '123 Fake St',
       billingApartment: '',
@@ -270,7 +328,9 @@ const CheckoutForm = () => {
 
   return (
     <>
-      {checkoutInitialized ? (
+      {order ? (
+        <ThankyouPage />
+      ) : checkoutInitialized ? (
         <div className="w-full lg:w-2/3 border-black">
           <div
             ref={checkoutRef}
@@ -280,7 +340,7 @@ const CheckoutForm = () => {
               CHECKOUT
             </h1>
           </div>
-          <div className="px-10 md:px-20 py-10">
+          <div className="px-10 md:px-20 py-10 w-full">
             <div className="mt-10 sm:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-6">
                 <div className="mt-5 md:mt-0 md:col-span-2">
@@ -758,7 +818,7 @@ const CheckoutForm = () => {
                               htmlFor="shippingOption"
                             ></label>
                             <select
-                              value={shippingValues.shippingOption.id}
+                              value={shippingValues.shippingOptions}
                               name="shippingOption"
                               className={
                                 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-4 border-black '
@@ -813,7 +873,7 @@ const CheckoutForm = () => {
                               }}
                             />
                           </div>
-                          {errors.length >= 1 ? (
+                          {errors ? (
                             <div className="col-span-6">
                               <div className="mt-8 py-4 px-2 block w-full border-4  border-red-500">
                                 <p className="text-lg">

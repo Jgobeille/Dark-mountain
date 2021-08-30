@@ -27,7 +27,7 @@ const fetchShippingCountries = async (
 
     fetchShippingOptionsAndSubdivisions(
       checkoutTokenId,
-      'JP',
+      'US',
       null,
       shippingValues,
       setShippingValues,
@@ -36,7 +36,7 @@ const fetchShippingCountries = async (
     )
     fetchShippingOptionsAndSubdivisions(
       checkoutTokenId,
-      'JP',
+      'US',
       null,
       billingValues,
       setBillingValues,
