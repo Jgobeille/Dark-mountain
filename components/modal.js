@@ -190,7 +190,7 @@ const Modal = () => {
                   setCheckoutInitialized(true)
                   executeScroll()
                   setModal(false)
-                  setActive(!active)
+                  setActive(false)
                 }}
                 type="button"
                 className="text-lg border-4 p-1 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out"
