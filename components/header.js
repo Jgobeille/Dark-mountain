@@ -12,7 +12,7 @@ import Sidebar from './sidebar'
 import { useEffect, useState } from 'react'
 
 function Header({ pages = [] }) {
-  const { setActive, active, modal, setModal } = useSettingsContext()
+  const { setActive, active, setModal, designs } = useSettingsContext()
 
   const [widthOutputNum, setWidthOutputNum] = useState()
 
@@ -73,7 +73,7 @@ function Header({ pages = [] }) {
           </nav>
         </div>
       </header>
-      {widthOutputNum < 1024 ? <Sidebar /> : ''}
+      {widthOutputNum < 1024 ? <Sidebar designs={designs} /> : ''}
     </>
   )
 }

@@ -17,8 +17,6 @@ const CartItem = ({ id, name, quantity, line_total, media }) => {
   const { setCart } = useCartDispatch()
 
   const handleUpdateCart = ({ cart }) => {
-    console.log(id)
-    console.log(cart)
     setCart(cart)
     generateCheckoutToken(
       setCheckoutToken,
@@ -84,6 +82,8 @@ const CartItem = ({ id, name, quantity, line_total, media }) => {
 
 const Modal = () => {
   const {
+    active,
+    setActive,
     modal,
     setModal,
     setAddToCartStatus,
@@ -190,6 +190,7 @@ const Modal = () => {
                   setCheckoutInitialized(true)
                   executeScroll()
                   setModal(false)
+                  setActive(!active)
                 }}
                 type="button"
                 className="text-lg border-4 p-1 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out"

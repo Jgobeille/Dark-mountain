@@ -52,7 +52,7 @@ const Form = () => (
             className={
               errors.name
                 ? 'border-4 border-red-500 mb-2 w-full'
-                : 'border-4 border-black mb-4 w-full'
+                : 'border-4 border-black mb-4 p-2 w-full'
             }
             type="name"
             name="name"

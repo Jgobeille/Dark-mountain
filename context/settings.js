@@ -52,6 +52,8 @@ function SettingsProvider({ children }) {
     billingOption: ''
   })
 
+  const [designs, setDesigns] = React.useState([])
+
   const switchCurrency = (currency) =>
     dispatch({ type: 'SWITCH_CURRENCY', payload: currency })
 
@@ -86,7 +88,9 @@ function SettingsProvider({ children }) {
         setCheckoutInitialized,
         checkoutRef,
         order,
-        setOrder
+        setOrder,
+        designs,
+        setDesigns
       }}
     >
       {children}

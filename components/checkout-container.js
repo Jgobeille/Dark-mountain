@@ -13,49 +13,70 @@ import * as Yup from 'yup'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 
 const ThankyouPage = () => {
-  const { order, setOrder, setCheckoutInitialized } = useSettingsContext()
+  const {
+    checkoutRef,
+    order,
+    setOrder,
+    setCheckoutInitialized
+  } = useSettingsContext()
 
-  console.log(order);
+  console.log(order)
   return (
     <>
-      <div className="border-b-4  border-t-4 border-black w-full lg:w-2/3">
+      <div
+        ref={checkoutRef}
+        className="border-b-4 border-t-4 border-black w-full lg:w-2/3"
+      >
         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold  ml-8 m-2">
           CHECKOUT
         </h1>
       </div>
       <div className="px-10 md:px-20 py-10 w-full lg:w-2/3">
-      <h2 className="text-xl mb-4">Thank you for your order! </h2>
-      <p className="text-xl mb-4">
-        your order has been placed. You should be receiving a confirmation email
-        soon about your order
-      </p>
+        <h2 className="text-xl mb-4">Thank you for your order! </h2>
+        <p className="text-xl mb-4">
+          your order has been placed. You should be receiving a confirmation
+          email soon.
+        </p>
 
-      <div className="my-4 p-4  w-full border-4  border-black">
-      <div className="flex flex-row justify-between mb-2 ">
-        <p className="text-lg">ORDER REF </p>
-        <p className="text-lg">{order.id}</p>
-      </div>
-
-      <div>
-        {order.order.line_items.map(lineItem => (
+        <div className="my-4 p-4  w-full border-4  border-black">
           <div className="flex flex-row justify-between mb-2 ">
-              <p className="text-lg">{lineItem.product_name}</p>
-              <p className="text-lg">{lineItem.price.formatted_with_symbol}</p>
+            <p className="text-lg">ORDER REF </p>
+            <p className="text-lg">{order.id}</p>
           </div>
-        )
-        )}
-      </div>
-      <div className="flex flex-row justify-between mb-2 ">
-        <p className="text-lg">SHIPPING</p>
-        <p className="text-lg">{order.order.shipping.price.formatted_with_symbol}</p>
-      </div>
-      </div>
 
+          <div>
+            {order.order.line_items.map((lineItem) => (
+              <div className="flex flex-row justify-between mb-2 ">
+                <p className="text-lg">{lineItem.product_name}</p>
+                <p className="text-lg">
+                  {lineItem.price.formatted_with_symbol}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-row border-t-2 border-black justify-between my-2 ">
+            <h3 className="text-lg uppercase">Shipping</h3>
+            <p className="text-lg">
+              {order.order.shipping.price.formatted_with_symbol}
+            </p>
+          </div>
+          <div className="flex flex-row  justify-between ">
+            <h3 className="text-lg uppercase font-bold ">total</h3>
+            <p className="text-lg font-bold">
+              {`${order.order.total.formatted_with_symbol}`}
+            </p>
+          </div>
+        </div>
 
-      <button className="border-4 shadow-brutalist-sm p-2 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out" onClick={() => { 
-        setOrder()
-        setCheckoutInitialized()
-        }}>BUY AGAIN</button>
+        <button
+          className="border-4 shadow-brutalist-sm p-2 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out"
+          onClick={() => {
+            setOrder()
+            setCheckoutInitialized()
+          }}
+        >
+          BUY AGAIN
+        </button>
       </div>
     </>
   )
@@ -230,7 +251,7 @@ const CheckoutForm = () => {
       .then((order) => {
         // Save the order into state
         setOrder(order)
-        
+
         // Clear the cart
         refreshCart()
         // Send the user to the receipt
@@ -340,7 +361,7 @@ const CheckoutForm = () => {
               CHECKOUT
             </h1>
           </div>
-          <div className="px-10 md:px-20 py-10 w-full">
+          <div className="px-10 md:px-20 py-10 w-full  ">
             <div className="mt-10 sm:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-6">
                 <div className="mt-5 md:mt-0 md:col-span-2">
