@@ -12,7 +12,6 @@ import Link from 'next/link'
 function Sidebar({ designs }) {
   const { setActive, active, checkoutInitialized } = useSettingsContext()
 
-  console.log(checkoutInitialized)
   const [widthOutputNum, setWidthOutputNum] = useState()
 
   const reportWindowSize = () => {
@@ -22,8 +21,6 @@ function Sidebar({ designs }) {
 
     return widthOutput
   }
-
-  console.log(designs)
 
   useEffect(() => {
     window.addEventListener('resize', reportWindowSize)
@@ -35,7 +32,7 @@ function Sidebar({ designs }) {
         widthOutputNum < 1024 ? 'lg:block ' : ''
       }
        ${active ? '  block ' : ' hidden '} 
-       ${checkoutInitialized ? '  h-full ' : ' h-auto '} 
+       ${checkoutInitialized ? '  h-full ' : ' h-full lg:h-auto '} 
        `}
     >
       <div className=" border-black">
@@ -79,8 +76,8 @@ function Sidebar({ designs }) {
                     src={design.image.url}
                     height={250}
                     width={250}
-                    alt={''}
-                    title={''}
+                    alt={design.altText}
+                    title={design.title}
                   />
 
                   <div
