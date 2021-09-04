@@ -28,6 +28,10 @@ function Header({ pages = [] }) {
     window.addEventListener('resize', reportWindowSize)
   }, [])
 
+  useEffect(() => {
+    reportWindowSize()
+  }, [])
+
   return (
     <>
       <header className="max-w-full mx-auto font-bold border-b-4 border-black px-4 sm:px-6 ">

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Form from '@/components/form'
 
-import Logo from '../public/DMC-main-logo.jpg'
+import Logo from '../public/DMC-main-logo.png'
 import { RiInstagramFill } from 'react-icons/ri'
 import { RiFacebookBoxFill } from 'react-icons/ri'
 import { useSettingsContext } from '@/context/settings'
