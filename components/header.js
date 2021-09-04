@@ -32,10 +32,10 @@ function Header({ pages = [] }) {
     <>
       <header className="max-w-full mx-auto font-bold border-b-4 border-black px-4 sm:px-6 ">
         <div className="py-3 w-full">
-          <nav className="grid grid-cols-header items-end justify-items-center">
-            <div className="filler"></div>
+          <nav className="grid grid-cols-header-2-cols md:grid-cols-header-3-cols items-end justify-items-center">
+            {widthOutputNum > 767 ? <div className="filler"></div> : ''}
             <Link href="/">
-              <a className="title-link text-xl md:text-2xl lg:text-3xl ">
+              <a className="title-link text-lg md:text-2xl lg:text-3xl ">
                 <h1 className="title-link">DARK MOUNTAIN CULT</h1>
               </a>
             </Link>

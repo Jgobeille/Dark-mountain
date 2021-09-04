@@ -357,7 +357,7 @@ const CheckoutForm = () => {
             ref={checkoutRef}
             className="border-b-4  border-t-4 border-black w-full "
           >
-            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold  ml-8 m-2">
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold ml-5 md:ml-8 m-2">
               CHECKOUT
             </h1>
           </div>

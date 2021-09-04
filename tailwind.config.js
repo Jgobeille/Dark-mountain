@@ -16,7 +16,8 @@ module.exports = {
       },
       gridTemplateColumns: {
         // Simple 16 column grid
-        header: '1fr 3fr 1fr'
+        'header-2-cols': '2fr 1fr',
+        'header-3-cols': '1fr 3fr 1fr'
       },
       keyframes: {
         tilt: {
