@@ -74,8 +74,8 @@ function Sidebar({ designs }) {
                 <div className=" relative text-center">
                   <Image
                     src={design.image.url}
-                    height={250}
-                    width={250}
+                    height={400}
+                    width={400}
                     alt={design.altText}
                     title={design.title}
                   />
