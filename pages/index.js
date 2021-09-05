@@ -1,8 +1,6 @@
-// import getAllProducts from '@/lib/get-all-products'
 import getPageData from '@/lib/get-page-data'
 import getDesigns from '@/lib/get-designs'
 import ProductGrid from '@/components/product-grid'
-import Sidebar from '@/components/sidebar'
 
 import commerce from '@/lib/commerce'
 
@@ -16,7 +14,6 @@ function IndexPage({ products, designs }) {
     <div className="flex flex-col">
       <ProductGrid products={products} />
       <CheckoutForm />
-      <Sidebar designs={designs} />
     </div>
   )
 }

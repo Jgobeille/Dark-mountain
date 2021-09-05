@@ -34,7 +34,7 @@ function Header({ pages = [] }) {
 
   return (
     <>
-      <header className="max-w-full mx-auto font-bold border-b-4 border-black px-4 sm:px-6 ">
+      <header className="max-w-full  mx-auto font-bold border-b-4 border-black px-4 sm:px-6 ">
         <div className="py-3 w-full">
           <nav className="grid grid-cols-header-2-cols md:grid-cols-header-3-cols items-end justify-items-center">
             {widthOutputNum > 767 ? <div className="filler"></div> : ''}

@@ -24,20 +24,31 @@ function Sidebar({ designs }) {
 
   useEffect(() => {
     window.addEventListener('resize', reportWindowSize)
-  }, [])
+
+    if (widthOutputNum > 1024) {
+      setActive(false)
+    }
+  }, [widthOutputNum])
 
   return (
     <div
-      className={`sidebar items-center border-l-4 border-black absolute right-0 w-full md:w-1/2 bg-white lg:block lg:w-1/3 z-40 ${
-        widthOutputNum < 1024 ? 'lg:block ' : ''
-      }
-       ${active ? '  block ' : ' hidden '} 
-       ${checkoutInitialized ? '  h-full ' : ' h-full lg:h-auto '} 
+      className={`sidebar  overflow-y-scroll scrollbar-hide items-center border-l-4 border-black right-0 w-full md:w-1/2 bg-white lg:block lg:w-1/3
+      ${widthOutputNum < 1024 ? 'lg:block ' : ''}
+      ${active ? 'absolute ' : ' hidden '}
+      ${checkoutInitialized ? '  h-full ' : ' h-full lg:h-auto '} 
        `}
     >
-      <div className=" border-black">
-        <div className="logo block">
-          <Image src={Logo} height={600} width={600} alt="logo" title="logo" />
+      <div className="border-black">
+        <div className="logo ">
+          {/* <Image
+            src={Logo}
+            height={600}
+            width={600}
+            alt="logo"
+            layout="intrinsic"
+            title="logo"
+          /> */}
+          <img src={Logo} alt="" />
         </div>
 
         <div className="flex flex-column justify-evenly space w-full pb-8">
@@ -69,7 +80,7 @@ function Sidebar({ designs }) {
         </div>
         <div>
           {designs.map((design) => (
-            <div className="bg-gray-50  w-full overflow-hidden relative">
+            <div className="bg-gray-50  w-full  ">
               {design.image ? (
                 <div className=" relative text-center">
                   <Image

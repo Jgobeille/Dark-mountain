@@ -39,9 +39,8 @@ export async function getStaticPaths() {
 export default function ProductPage({ product }) {
   const { activeCurrency } = useSettingsContext()
 
-  console.log(typeof product.description)
   return (
-    <React.Fragment>
+    <>
       <div className="modal block lg:fixed top-0 left-0 w-full h-full bg-black z-50">
         <section className="flex flex-col lg:flex-row md:mx-32 lg:mx-0 lg:absolute lg:fixed bg-white lg:w-4/5 h-full lg:h-auto lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2">
           <div className="flex flex-row w-full justify-center">
@@ -108,6 +107,6 @@ export default function ProductPage({ product }) {
           </div>
         </section>
       </div>
-    </React.Fragment>
+    </>
   )
 }

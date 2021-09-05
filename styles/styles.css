@@ -10,10 +10,13 @@ html {
 
 body {
   height: 100%;
+  @apply scrollbar-hide;
 }
 #__next {
   overflow-x: hidden;
+  @apply scrollbar-hide;
 }
+
 body,
 button {
   font-style: oblique;

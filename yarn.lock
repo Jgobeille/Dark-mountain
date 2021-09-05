@@ -2790,6 +2790,11 @@
   dependencies:
     "dequal" "2.0.2"
 
+"tailwind-scrollbar-hide@^1.0.3":
+  "integrity" "sha512-BF+ITR3cJFFF8IP1B6snlZtwSJxwWIB030LX9ZGEITBfWiqn1V4rEJUF44HJH5w6hZBrqSlwJdhILya8OvWefg=="
+  "resolved" "https://registry.npmjs.org/tailwind-scrollbar-hide/-/tailwind-scrollbar-hide-1.0.3.tgz"
+  "version" "1.0.3"
+
 "tailwindcss@^2.0.0", "tailwindcss@>=2.0.0":
   "integrity" "sha512-nO9JRE1pO7SF9RnYAl6g7uzeHdrmKAFqNjT9NtZUfxqimJZAOOLOEyIEUiMq12+xIc7mC2Ey3Vf90XjHpWKfbw=="
   "resolved" "https://registry.npmjs.org/tailwindcss/-/tailwindcss-2.0.2.tgz"

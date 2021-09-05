@@ -11,6 +11,11 @@ module.exports = {
       'brutalist-xl': '15px 15px 0px 0px #000000'
     },
     extend: {
+      colors: {
+        turquoise: {
+          default: '#4ec5c1'
+        }
+      },
       screens: {
         xs: { max: '400px' }
       },
@@ -46,5 +51,5 @@ module.exports = {
       padding: ['first']
     }
   },
-  plugins: [require('@tailwindcss/forms')]
+  plugins: [require('@tailwindcss/forms'), require('tailwind-scrollbar-hide')]
 }

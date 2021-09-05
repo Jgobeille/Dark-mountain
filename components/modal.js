@@ -130,7 +130,7 @@ const Modal = () => {
       className={`${showHideClassName} absolute w-full right-0 md:fixed top-0 md:top-2 md:right-8 sm:w-auto  z-50`}
     >
       {isEmpty ? (
-        <section className="bg-white border-4 border-black md:shadow-brutalist-lg">
+        <section className="bg-turquoise-default border-4 border-black  md:shadow-brutalist-lg">
           <div className="flex flex-column justify-between border-b-2 border-black p">
             <h1 className="text-3xl font-bold p-2">YOUR CART</h1>
             <button onClick={() => setModal(false)} className="mx-4 text-xl">
@@ -141,13 +141,10 @@ const Modal = () => {
             <p className="text-2xl text-center mb-4">
               {`Your cart is empty ${';('}`}
             </p>
-            <p className=" text-2xl text-center">
-              Why don't you go ahead and buy something already?
-            </p>
           </div>
         </section>
       ) : (
-        <section className="bg-white border-4 border-black md:shadow-brutalist-lg">
+        <section className="bg-turquoise-default border-4 border-black md:shadow-brutalist-lg">
           <div className="flex flex-column justify-between border-b-2 border-black">
             <h1 className="sm:text-xl md:text-2xl lg:text-3xl font-bold p-2">
               YOUR CART

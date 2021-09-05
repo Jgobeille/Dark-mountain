@@ -352,7 +352,7 @@ const CheckoutForm = () => {
       {order ? (
         <ThankyouPage />
       ) : checkoutInitialized ? (
-        <div className="w-full lg:w-2/3 border-black">
+        <div className="w-full border-black">
           <div
             ref={checkoutRef}
             className="border-b-4  border-t-4 border-black w-full "

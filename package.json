@@ -34,6 +34,7 @@
     "semantic-ui-react": "^2.0.3",
     "stripe": "^8.137.0",
     "swr": "^0.4.2",
+    "tailwind-scrollbar-hide": "^1.0.3",
     "yup": "^0.32.9"
   },
   "devDependencies": {
