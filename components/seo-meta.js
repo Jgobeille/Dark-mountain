@@ -16,7 +16,7 @@ const Meta = (props) => {
       />
       <meta property="og:site_name" content="Dark Mountain Cult" />
       <meta property="og:url" content={props.canonical} />
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={props.title} />
       <meta name="twitter:description" content={props.desc} />
       <meta name="twitter:site" content="Dark Mountain Cult" />
