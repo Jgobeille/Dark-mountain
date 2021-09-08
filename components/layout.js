@@ -18,7 +18,6 @@ function Layout({ children, footer, navigation }) {
   const showHeader = router.pathname.includes('products') ? false : true
   return (
     <React.Fragment>
-      <DefaultSeo {...defaultSeo} />
       {showHeader && <Header />}
       <div
         className={`flex flex-row ${

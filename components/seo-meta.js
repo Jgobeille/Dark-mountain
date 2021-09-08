@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import ProductCard from './product-card'
+import Logo from '../public/DMC-main-logo.png'
 const Meta = (props) => {
   console.log(props)
   return (
@@ -25,10 +26,20 @@ const Meta = (props) => {
       <meta name="facebook:description" content={props.desc} />
       <meta name="facebook:site" content="Dark Mountain Cult" />
       <meta name="facebook:creator" content="Dark Mountain Cult" />
-      <link rel="icon" type="image/png" href={props.src} />
-      <link rel="apple-touch-icon" href={props.src} />
-      <meta property="og:image" content={props.src} />
-      <meta name="twitter:image" content={props.src} />
+      <link rel="icon" type="image/png" href={`${props.image}`} />
+
+      {props.image ? (
+        <link rel="apple-touch-icon" content={`${props.image}`} />
+      ) : (
+        <link rel="apple-touch-icon" content={Logo} />
+      )}
+      {props.image ? (
+        <meta property="og:image" content={`${props.image}`} />
+      ) : (
+        <meta property="og:image" content={Logo} />
+      )}
+      {props.image && <meta name="twitter:image" content={`${props.image}`} />}
+      {props.image && <meta name="facebook:image" content={`${props.image}`} />}
       {props.canonical && <link rel="canonical" href={`${props.canonical}`} />}
     </Head>
   )
