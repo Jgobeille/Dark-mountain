@@ -6,12 +6,22 @@ import commerce from '@/lib/commerce'
 
 import CheckoutForm from '@/components/checkout-container'
 import { useSettingsContext } from '@/context/settings'
+
+import Logo from '../public/DMC-main-logo.png'
+import Meta from '@/components/seo-meta'
 function IndexPage({ products, designs }) {
   const { setDesigns } = useSettingsContext()
 
   setDesigns(designs)
   return (
     <div className="flex flex-col">
+      <Meta
+        title="Dark Mountain Cult"
+        desc="I sell custom prints of your favorite tv shows and video games!"
+        canonical="https://dark-mountain.vercel.app"
+        css="styles/styles.css"
+        image={Logo}
+      />
       <ProductGrid products={products} />
       <CheckoutForm />
     </div>

@@ -40,15 +40,7 @@ function Sidebar({ designs }) {
     >
       <div className="border-black">
         <div className="logo ">
-          {/* <Image
-            src={Logo}
-            height={600}
-            width={600}
-            alt="logo"
-            layout="intrinsic"
-            title="logo"
-          /> */}
-          <img src={Logo} alt="" />
+          <img src={Logo} alt="Dark Mountain Cult Logo" />
         </div>
 
         <div className="flex flex-column justify-evenly space w-full pb-8">

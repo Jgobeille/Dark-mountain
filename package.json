@@ -29,6 +29,7 @@
     "react-dom": "^17.0.0",
     "react-hook-form": "^6.15.8",
     "react-icons": "^4.2.0",
+    "react-share": "^4.4.0",
     "react-use-cart": "^1.11.1",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3",

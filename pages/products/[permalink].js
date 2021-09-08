@@ -1,13 +1,24 @@
 // pages/products/[permalink].js
 import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import Meta from '@/components/seo-meta.js'
+import { useRouter } from 'next/router'
 import commerce from '@/lib/commerce'
 import parse from 'html-react-parser'
 import { formatCurrencyValue } from '@/utils/format-currency-value'
 const { useSettingsContext } = require('@/context/settings')
 
-import Image from 'next/image'
-import { RiFacebookBoxFill, RiInstagramFill } from 'react-icons/ri'
-import Link from 'next/link'
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  PinterestShareButton,
+  PinterestIcon,
+  RedditShareButton,
+  RedditIcon,
+  TwitterShareButton,
+  TwitterIcon
+} from 'react-share'
 
 export async function getStaticProps({ params }) {
   const { permalink } = params
@@ -38,9 +49,18 @@ export async function getStaticPaths() {
 
 export default function ProductPage({ product }) {
   const { activeCurrency } = useSettingsContext()
+  const router = useRouter()
 
+  console.log(product.description)
   return (
     <>
+      <Meta
+        title={product.name}
+        desc={product.description}
+        canonical={`https://dark-mountain.vercel.app${router.asPath}`}
+        css="styles/styles.css"
+        image={product.media.source}
+      />
       <div className="modal block lg:fixed top-0 left-0 w-full h-full bg-black z-50">
         <section className="flex flex-col lg:flex-row md:mx-32 lg:mx-0 lg:absolute lg:fixed bg-white lg:w-4/5 h-full lg:h-auto lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2">
           <div className="flex flex-row w-full justify-center">
@@ -69,8 +89,45 @@ export default function ProductPage({ product }) {
             <div className="flex flex-row border-b-2 border-black items-center p-2">
               <h3 className="">SHARE</h3>
               <div className="flex flex-row mx-2">
-                <RiInstagramFill className="text-3xl mx-2" />
-                <RiFacebookBoxFill className="text-3xl mx-2" />
+                <TwitterShareButton
+                  url={`https://dark-mountain.vercel.app${router.asPath}`}
+                >
+                  <TwitterIcon
+                    size={32}
+                    bgStyle={{ fill: 'black' }}
+                    round="true"
+                    className="mr-2"
+                  />
+                </TwitterShareButton>
+                <FacebookShareButton
+                  url={`https://dark-mountain.vercel.app${router.asPath}`}
+                >
+                  <FacebookIcon
+                    size={32}
+                    bgStyle={{ fill: 'black' }}
+                    round="true"
+                    className="mr-2"
+                  />
+                </FacebookShareButton>
+                <RedditShareButton
+                  url={`https://dark-mountain.vercel.app${router.asPath}`}
+                >
+                  <RedditIcon
+                    size={32}
+                    bgStyle={{ fill: 'black' }}
+                    round="true"
+                    className="mr-2"
+                  />
+                </RedditShareButton>
+                <PinterestShareButton
+                  url={`https://dark-mountain.vercel.app${router.asPath}`}
+                >
+                  <PinterestIcon
+                    size={32}
+                    bgStyle={{ fill: 'black' }}
+                    round="true"
+                  />
+                </PinterestShareButton>
               </div>
             </div>
             <div className="flex flex-row border-b-2 border-black ">
