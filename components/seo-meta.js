@@ -7,7 +7,7 @@ const Meta = (props) => {
       <title></title>
       <meta name="description" content={props.desc} />
       <meta property="og:type" content="website" />
-      <meta name="og:title" property="og:title" content="" />
+      <meta name="og:title" property="og:title" content={props.title} />
       <meta
         name="og:description"
         property="og:description"
@@ -20,9 +20,13 @@ const Meta = (props) => {
       <meta name="twitter:description" content={props.desc} />
       <meta name="twitter:site" content="Dark Mountain Cult" />
       <meta name="twitter:creator" content="Dark Mountain Cult" />
+      <meta name="facebook:card" content="summary" />
+      <meta name="facebook:title" content={props.title} />
+      <meta name="facebook:description" content={props.desc} />
+      <meta name="facebook:site" content="Dark Mountain Cult" />
+      <meta name="facebook:creator" content="Dark Mountain Cult" />
       <link rel="icon" type="image/png" href={props.src} />
       <link rel="apple-touch-icon" href={props.src} />
-      <link rel="stylesheet" href="" />
       <meta property="og:image" content={props.src} />
       <meta name="twitter:image" content={props.src} />
       {props.canonical && <link rel="canonical" href={`${props.canonical}`} />}
