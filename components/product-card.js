@@ -5,7 +5,7 @@ import { formatCurrencyValue } from '@/utils/format-currency-value'
 import { useSettingsContext } from '@/context/settings'
 
 import commerce from '@/lib/commerce'
-import { useCartDispatch, useCartState } from '@/context/cart'
+import { useCartDispatch } from '@/context/cart'
 import generateCheckoutToken from '@/utils/generateCheckoutToken'
 
 function ProductCard({ id, media, name, price, permalink }) {
@@ -19,11 +19,9 @@ function ProductCard({ id, media, name, price, permalink }) {
     billingValues,
     setBillingValues
   } = useSettingsContext()
-  const { line_items } = useCartState()
   const { setCart } = useCartDispatch()
 
   const addToCart = async (id) => {
-    console.log(id)
     try {
       setAddToCartStatus({ id, message: 'ADDING TO CART...' })
       const { cart } = await commerce.cart.add(id)
@@ -86,7 +84,7 @@ function ProductCard({ id, media, name, price, permalink }) {
         <div>
           <button
             onClick={() => addToCart(id)}
-            className="hover:bg-black hover:text-white transition duration-300 ease-in-out text-center py-2 w-full border-t-2 border-black"
+            className="hover:bg-black hover:text-white transition duration-300 ease-in-out text-center py-2 w-full border-t-2 font-bold border-black"
           >
             {id === addToCartStatus.id
               ? addToCartStatus.message

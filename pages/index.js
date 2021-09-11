@@ -1,5 +1,6 @@
 import getPageData from '@/lib/get-page-data'
 import getDesigns from '@/lib/get-designs'
+import getPolicies from '@/lib/get-policies'
 import ProductGrid from '@/components/product-grid'
 
 import commerce from '@/lib/commerce'
@@ -9,10 +10,13 @@ import { useSettingsContext } from '@/context/settings'
 
 import Logo from '../public/DMC-main-logo.png'
 import Meta from '@/components/seo-meta'
-function IndexPage({ products, designs }) {
-  const { setDesigns } = useSettingsContext()
+function IndexPage({ products, designs, policies }) {
+  const { setDesigns, setPolicies } = useSettingsContext()
+
+  console.log(Object.values(policies))
 
   setDesigns(designs)
+  setPolicies()
   return (
     <>
       <Meta
@@ -33,9 +37,12 @@ export async function getStaticProps({ locale }) {
 
   const { data: products } = await commerce.products.list()
   const { designs } = await getDesigns()
+  const { policies } = await getPolicies()
+
+  console.log(policies)
 
   return {
-    props: { ...pageData, products, designs }
+    props: { ...pageData, products, designs, policies }
   }
 }
 
