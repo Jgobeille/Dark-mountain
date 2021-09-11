@@ -37,7 +37,7 @@ const Form = () => {
           setMessage(null)
           setSubmitting(false)
           try {
-            const res = await fetch('api/sendEmail', {
+            const res = await fetch('/api/sendEmail', {
               method: 'POST',
               body: JSON.stringify(values)
             })
