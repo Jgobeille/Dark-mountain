@@ -53,7 +53,7 @@ export default function ProductPage({ product }) {
 
   console.log(product.description)
   return (
-    <>
+    <div>
       <Meta
         title={product.name}
         desc={product.description}
@@ -164,6 +164,6 @@ export default function ProductPage({ product }) {
           </div>
         </section>
       </div>
-    </>
+    </div>
   )
 }

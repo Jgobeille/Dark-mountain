@@ -51,9 +51,7 @@ function Footer() {
               Facebook
             </a>
             <div className="mx-2 text-lg font-bold cursor-pointer">
-              Made with{' '}
-              <span className=" heart animate-heartbeat inline-block">❤</span>{' '}
-              by Jamie Gobeille
+              Made with ❤ by Jamie Gobeille
             </div>
             <div className="mx-2 text-lg font-bold cursor-pointer">
               Thanks for checking out the site!
@@ -102,9 +100,7 @@ function Footer() {
               Facebook
             </a>
             <div className="mx-2 text-lg font-bold cursor-pointer">
-              Made with{' '}
-              <span className=" heart animate-heartbeat inline-block">❤</span>{' '}
-              by Jamie Gobeille
+              Made with ❤ by Jamie Gobeille
             </div>
             <div className="mx-2 text-lg font-bold cursor-pointer">
               Thanks for checking out the site!
@@ -147,9 +143,7 @@ function Footer() {
               Facebook
             </a>
             <div className="mx-2 text-lg font-bold cursor-pointer">
-              Made with{' '}
-              <span className=" heart animate-heartbeat inline-block">❤</span>
-              by Jamie Gobeille
+              Made with ❤ by Jamie Gobeille
             </div>
             <div className="mx-2 text-lg font-bold cursor-pointer">
               Thanks for checking out the site!
