@@ -12,7 +12,7 @@ module.exports = {
     },
     extend: {
       width: {
-        3800: '2777px'
+        3733: '3733px'
       },
       colors: {
         turquoise: {
@@ -41,7 +41,7 @@ module.exports = {
         },
         scroll: {
           '0%': { marginLeft: '0px' },
-          '100%': { marginLeft: '-1850px' }
+          '100%': { marginLeft: '-2435px' }
         },
 
         heartbeat: {

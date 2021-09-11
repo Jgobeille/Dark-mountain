@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer className="border-black border-t-4" aria-labelledby="footerHeading">
       <div className="py-2 mx-auto overflow-hidden border-b-2">
-        <div className="flex justify-center w-3800 pl-6  overflow-hidden">
+        <div className="flex justify-center w-3733 pl-6  overflow-hidden">
           <div className=" flex flex-row whitespace-nowrap animate-scroll slide-track ">
             <div
               onClick={() => {
