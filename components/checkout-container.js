@@ -25,13 +25,13 @@ const ThankyouPage = () => {
     <>
       <div
         ref={checkoutRef}
-        className="border-b-4 border-t-4 border-black w-full lg:w-2/3"
+        className="border-b-4 border-t-4 border-black w-full "
       >
         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold  ml-8 m-2">
           CHECKOUT
         </h1>
       </div>
-      <div className="px-10 md:px-20 py-10 w-full lg:w-2/3">
+      <div className="px-10 md:px-20 py-10 w-full ">
         <h2 className="text-xl mb-4">Thank you for your order! </h2>
         <p className="text-xl mb-4">
           your order has been placed. You should be receiving a confirmation

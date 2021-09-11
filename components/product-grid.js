@@ -1,4 +1,5 @@
 import ProductCard from '@/components/product-card'
+import { useEffect } from 'react'
 
 function ProductGrid({ products }) {
   return (

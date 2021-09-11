@@ -20,6 +20,7 @@ function Layout({ children, footer, navigation }) {
   return (
     <React.Fragment>
       {showHeader && <Header />}
+
       <div
         className={`flex flex-row ${
           checkoutInitialized ? '  h-full ' : 'lg:max-h-screen '
