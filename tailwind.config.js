@@ -11,6 +11,9 @@ module.exports = {
       'brutalist-xl': '15px 15px 0px 0px #000000'
     },
     extend: {
+      width: {
+        3800: '2777px'
+      },
       colors: {
         turquoise: {
           default: '#4ec5c1'
@@ -35,11 +38,43 @@ module.exports = {
           '100%': {
             transform: 'rotate(0)'
           }
+        },
+        scroll: {
+          '0%': { marginLeft: '0px' },
+          '100%': { marginLeft: '-1850px' }
+        },
+
+        heartbeat: {
+          '0%': {
+            transform: 'scale(.75)'
+          },
+
+          '20%': {
+            transform: 'scale(1)'
+          },
+
+          '40%': {
+            transform: 'scale(.75)'
+          },
+
+          '60%': {
+            transform: 'scale(1)'
+          },
+
+          '80%': {
+            transform: 'scale(.75)'
+          },
+
+          '100%': {
+            transform: 'scale(.75)'
+          }
         }
       },
       tilt: ['hover'],
       animation: {
-        tilt: 'tilt 1s ease-in-out infinite'
+        tilt: 'tilt 1s ease-in-out infinite',
+        scroll: 'scroll 10s linear infinite',
+        heartbeat: 'heartbeat 1s infinite '
       },
       translate: {
         '12Percent': '12%'

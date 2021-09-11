@@ -71,8 +71,8 @@ function Sidebar({ designs }) {
           </h1>
         </div>
         <div>
-          {designs.map((design) => (
-            <div className="bg-gray-50  w-full  ">
+          {designs.map((design, i) => (
+            <div key={i} className="bg-gray-50  w-full  ">
               {design.image ? (
                 <div className=" relative text-center">
                   <Image

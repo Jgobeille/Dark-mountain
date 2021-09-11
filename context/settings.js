@@ -26,6 +26,7 @@ function SettingsProvider({ children }) {
   const [active, setActive] = React.useState(false)
 
   const [modal, setModal] = React.useState(false)
+  const [legalModal, setLegalModal] = React.useState(false)
   const [checkoutInitialized, setCheckoutInitialized] = React.useState(false)
   const checkoutRef = React.useRef(null)
 
@@ -76,6 +77,8 @@ function SettingsProvider({ children }) {
         setActive,
         modal,
         setModal,
+        legalModal,
+        setLegalModal,
         addToCartStatus,
         setAddToCartStatus,
         checkoutToken,

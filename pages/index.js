@@ -14,7 +14,7 @@ function IndexPage({ products, designs }) {
 
   setDesigns(designs)
   return (
-    <div className="flex flex-col">
+    <>
       <Meta
         title="Dark Mountain Cult"
         desc="I sell custom prints of your favorite tv shows and video games!"
@@ -24,7 +24,7 @@ function IndexPage({ products, designs }) {
       />
       <ProductGrid products={products} />
       <CheckoutForm />
-    </div>
+    </>
   )
 }
 

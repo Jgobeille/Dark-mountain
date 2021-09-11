@@ -7,6 +7,7 @@ import Header from '@/components/header'
 import Sidebar from '@/components/sidebar'
 import { useRouter } from 'next/router'
 import Modal from '@/components/modal'
+import LegalModal from '@/components/legalModal'
 
 import { useSettingsContext } from '@/context/settings'
 
@@ -24,11 +25,12 @@ function Layout({ children, footer, navigation }) {
           checkoutInitialized ? '  h-full ' : 'lg:max-h-screen '
         }`}
       >
-        <div className="w-full lg:w-2/3 ">{children}</div>
+        <div className="w-full lg:w-2/3 sticky top-0">{children}</div>
         <Sidebar designs={designs} />
         <Modal />
+        <LegalModal />
       </div>
-      {/* <Footer {...footer} /> */}
+      <Footer {...footer} />
     </React.Fragment>
   )
 }
