@@ -1,4 +1,3 @@
-import getPageData from '@/lib/get-page-data'
 import getDesigns from '@/lib/get-designs'
 import getPolicies from '@/lib/get-policies'
 import ProductGrid from '@/components/product-grid'
@@ -36,15 +35,13 @@ function IndexPage({ products, designs, policies }) {
   )
 }
 
-export async function getStaticProps({ locale }) {
-  const pageData = await getPageData({ locale })
-
+export async function getStaticProps() {
   const { data: products } = await commerce.products.list()
   const { designs } = await getDesigns()
   const { policies } = await getPolicies()
 
   return {
-    props: { ...pageData, products, designs, policies }
+    props: { products, designs, policies }
   }
 }
 
