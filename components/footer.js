@@ -1,5 +1,6 @@
 import { useSettingsContext } from '@/context/settings'
 
+// Code comment
 function Footer() {
   const { setLegalModal, setSelectedPolicy } = useSettingsContext()
   return (
