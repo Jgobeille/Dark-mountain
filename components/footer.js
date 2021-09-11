@@ -1,26 +1,35 @@
 import { useSettingsContext } from '@/context/settings'
 
 function Footer() {
-  const { setLegalModal } = useSettingsContext()
+  const { setLegalModal, setSelectedPolicy } = useSettingsContext()
   return (
     <footer className="border-black border-t-4" aria-labelledby="footerHeading">
       <div className="py-2 mx-auto overflow-hidden border-b-2">
         <div className="flex justify-center w-3800 pl-6  overflow-hidden">
           <div className=" flex flex-row whitespace-nowrap animate-scroll slide-track ">
             <div
-              onClick={() => setLegalModal(true)}
+              onClick={() => {
+                setLegalModal(true)
+                setSelectedPolicy('return')
+              }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
-              <p>Return Policy </p>
+              Return Policy
             </div>
             <div
-              onClick={() => setLegalModal(true)}
+              onClick={() => {
+                setLegalModal(true)
+                setSelectedPolicy('service')
+              }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
               Terms of Service
             </div>
             <div
-              onClick={() => setLegalModal(true)}
+              onClick={() => {
+                setLegalModal(true)
+                setSelectedPolicy('privacy')
+              }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
               Privacy Policy
@@ -52,19 +61,28 @@ function Footer() {
               Thanks for checking out the site!
             </div>
             <div
-              onClick={() => setLegalModal(true)}
+              onClick={() => {
+                setLegalModal(true)
+                setSelectedPolicy('return')
+              }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
               Return Policy
             </div>
             <div
-              onClick={() => setLegalModal(true)}
+              onClick={() => {
+                setLegalModal(true)
+                setSelectedPolicy('service')
+              }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
               Terms of Service
             </div>
             <div
-              onClick={() => setLegalModal(true)}
+              onClick={() => {
+                setLegalModal(true)
+                setSelectedPolicy('privacy')
+              }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
               Privacy Policy
@@ -96,16 +114,22 @@ function Footer() {
               Thanks for checking out the site!
             </div>
             <div
-              onClick={() => setLegalModal(true)}
+              onClick={() => {
+                setLegalModal(true)
+                setSelectedPolicy('return')
+              }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
               Return Policy
             </div>
             <div
-              onClick={() => setLegalModal(true)}
+              onClick={() => {
+                setLegalModal(true)
+                setSelectedPolicy('service')
+              }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
-              Terms of Service
+              Terms"privacy" of Service
             </div>
             <div className="mx-2 text-lg font-bold cursor-pointer">
               Privacy Policy

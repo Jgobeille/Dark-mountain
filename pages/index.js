@@ -10,13 +10,17 @@ import { useSettingsContext } from '@/context/settings'
 
 import Logo from '../public/DMC-main-logo.png'
 import Meta from '@/components/seo-meta'
+import { useEffect } from 'react'
 function IndexPage({ products, designs, policies }) {
   const { setDesigns, setPolicies } = useSettingsContext()
 
-  console.log(Object.values(policies))
+  useEffect(() => {
+    const policiesToArray = Object.values(policies)
+    setPolicies(policiesToArray)
+  }, [setPolicies])
 
   setDesigns(designs)
-  setPolicies()
+
   return (
     <>
       <Meta
@@ -38,8 +42,6 @@ export async function getStaticProps({ locale }) {
   const { data: products } = await commerce.products.list()
   const { designs } = await getDesigns()
   const { policies } = await getPolicies()
-
-  console.log(policies)
 
   return {
     props: { ...pageData, products, designs, policies }

@@ -2,7 +2,6 @@ import Head from 'next/head'
 import ProductCard from './product-card'
 import Logo from '../public/DMC-main-logo.png'
 const Meta = (props) => {
-  console.log(props)
   return (
     <Head>
       <title></title>

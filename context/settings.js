@@ -27,7 +27,8 @@ function SettingsProvider({ children }) {
 
   const [modal, setModal] = React.useState(false)
   const [legalModal, setLegalModal] = React.useState(false)
-  const [policies, setPolicies] = React.useState(false)
+  const [policies, setPolicies] = React.useState([])
+  const [selectedPolicy, setSelectedPolicy] = React.useState([])
 
   const [checkoutInitialized, setCheckoutInitialized] = React.useState(false)
   const checkoutRef = React.useRef(null)
@@ -97,7 +98,9 @@ function SettingsProvider({ children }) {
         designs,
         setDesigns,
         policies,
-        setPolicies
+        setPolicies,
+        selectedPolicy,
+        setSelectedPolicy
       }}
     >
       {children}
