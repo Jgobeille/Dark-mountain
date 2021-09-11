@@ -83,10 +83,7 @@ function Sidebar({ designs }) {
                     title={design.title}
                   />
 
-                  <div
-                    // onClick={() => setModal(true)}
-                    className="flex flex-col content-center justify-center overlay absolute top-0 bottom-0 left-0 right-0 h-full w-full opacity-0 hover:opacity-100 hover:bg-black transition duration-300 ease-in-out"
-                  >
+                  <div className="flex flex-col content-center justify-center overlay absolute top-0 bottom-0 left-0 right-0 h-full w-full opacity-0 hover:opacity-100 hover:bg-black transition duration-300 ease-in-out">
                     <p className="text-white">{design.description}</p>
                   </div>
                 </div>

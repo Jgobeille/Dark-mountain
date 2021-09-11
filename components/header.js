@@ -1,8 +1,5 @@
 import Link from 'next/link'
-import { useCart } from 'react-use-cart'
 
-import { formatCurrencyValue } from '@/utils/format-currency-value'
-import { GraphCMSSVG } from '@/svgs'
 import { ShoppingCartIcon } from '@/icons'
 
 import { GiHamburgerMenu } from 'react-icons/gi'

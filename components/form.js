@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Formik } from 'formik'
-import { stringify } from 'postcss'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { clearConfigCache } from 'prettier'
 
 const Form = () => {
@@ -8,8 +8,10 @@ const Form = () => {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
 
+  const reRef = useRef()
+
   return (
-    <div className="flex flex-row justify-center">
+    <div className="mx-4 justify-center">
       <Formik
         initialValues={{ name: '', email: '', message: '' }}
         validateOnChange={false}
@@ -37,6 +39,11 @@ const Form = () => {
           setMessage(null)
           setSubmitting(false)
           try {
+            const token = await reRef.current.executeAsync()
+            reRef.current.reset()
+
+            values.token = token
+
             const res = await fetch('/api/sendEmail', {
               method: 'POST',
               body: JSON.stringify(values)
@@ -153,6 +160,13 @@ const Form = () => {
               <div className="font-main text-lg text-ghost-white">
                 {message ? <p>{message} </p> : ''}
               </div>
+            </div>
+            <div className="mb-4 w-full">
+              <ReCAPTCHA
+                sitekey="6LdatF0cAAAAAInXk-A5hqbZEJQ-DHrjXhy447u_"
+                size="invisible"
+                ref={reRef}
+              />
             </div>
             <button
               type="submit"
