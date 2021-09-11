@@ -129,7 +129,7 @@ function Footer() {
               }}
               className="mx-2 text-lg font-bold cursor-pointer"
             >
-              Terms"privacy" of Service
+              Terms of Service
             </div>
             <div className="mx-2 text-lg font-bold cursor-pointer">
               Privacy Policy
