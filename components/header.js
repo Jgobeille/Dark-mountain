@@ -77,7 +77,6 @@ function Header({ pages = [] }) {
           </nav>
         </div>
       </header>
-      {widthOutputNum < 1024 ? <Sidebar designs={designs} /> : ''}
     </>
   )
 }

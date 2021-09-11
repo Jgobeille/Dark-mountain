@@ -3,8 +3,11 @@ import { useSettingsContext } from '@/context/settings'
 function Footer() {
   const { setLegalModal, setSelectedPolicy } = useSettingsContext()
   return (
-    <footer className="border-black border-t-4" aria-labelledby="footerHeading">
-      <div className="py-2 mx-auto overflow-hidden border-b-2">
+    <footer
+      className="border-black border-t-4 absolute"
+      aria-labelledby="footerHeading"
+    >
+      <div className="py-4 mx-auto overflow-hidden border-b-2">
         <div className="flex justify-center w-3733 pl-6  overflow-hidden">
           <div className=" flex flex-row whitespace-nowrap animate-scroll slide-track ">
             <div
@@ -52,9 +55,7 @@ function Footer() {
             </a>
             <div className="mx-2 text-lg font-bold cursor-pointer">
               Made with{' '}
-              <span className=" heart animate-heartbeat inline-block z-10">
-                ❤
-              </span>{' '}
+              <span className=" heart animate-heartbeat inline-block">❤</span>{' '}
               by Jamie Gobeille
             </div>
             <div className="mx-2 text-lg font-bold cursor-pointer">
@@ -105,9 +106,7 @@ function Footer() {
             </a>
             <div className="mx-2 text-lg font-bold cursor-pointer">
               Made with{' '}
-              <span className=" heart animate-heartbeat inline-block z-10">
-                ❤
-              </span>{' '}
+              <span className=" heart animate-heartbeat inline-block">❤</span>{' '}
               by Jamie Gobeille
             </div>
             <div className="mx-2 text-lg font-bold cursor-pointer">
@@ -152,9 +151,7 @@ function Footer() {
             </a>
             <div className="mx-2 text-lg font-bold cursor-pointer">
               Made with{' '}
-              <span className=" heart animate-heartbeat inline-block z-10">
-                ❤
-              </span>
+              <span className=" heart animate-heartbeat inline-block">❤</span>
               by Jamie Gobeille
             </div>
             <div className="mx-2 text-lg font-bold cursor-pointer">
