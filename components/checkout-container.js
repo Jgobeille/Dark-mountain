@@ -12,6 +12,8 @@ import * as Yup from 'yup'
 
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 
+import StripeLogo from 'components/stripeLogo.js'
+
 const ThankyouPage = () => {
   const {
     checkoutRef,
@@ -892,6 +894,7 @@ const CheckoutForm = () => {
                               }}
                             />
                           </div>
+
                           {errors ? (
                             <div className="col-span-6">
                               <div className="mt-8 py-4 px-2 block w-full border-4  border-red-500">
@@ -910,6 +913,7 @@ const CheckoutForm = () => {
                           ) : (
                             ''
                           )}
+                          <div className="col-span-6"></div>
                         </div>
                         <div className="mt-8 py-4 px-2 block w-full border-4  border-black">
                           {line_items.map((line_item) => (
@@ -952,6 +956,9 @@ const CheckoutForm = () => {
                           >
                             COMPLETE PURCHASE
                           </button>
+                          <div className="mt-10 w-48">
+                            <StripeLogo className="text-lg" />
+                          </div>
                         </div>
                       </div>
                     </div>
