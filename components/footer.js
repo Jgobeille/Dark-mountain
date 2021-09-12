@@ -4,7 +4,10 @@ import { useSettingsContext } from '@/context/settings'
 function Footer() {
   const { setLegalModal, setSelectedPolicy } = useSettingsContext()
   return (
-    <footer className="border-black border-t-4" aria-labelledby="footerHeading">
+    <footer
+      className="border-black bg-white border-t-4"
+      aria-labelledby="footerHeading"
+    >
       <div className="py-4 mx-auto overflow-hidden border-b-2">
         <div className="flex justify-center w-3733 pl-6  overflow-hidden">
           <div className=" flex flex-row whitespace-nowrap animate-scroll slide-track ">

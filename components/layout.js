@@ -16,17 +16,38 @@ function Layout({ children, footer, navigation }) {
 
   const { designs, checkoutInitialized } = useSettingsContext()
 
+  // const reportWindowHeight = () => {
+  //   const heightOutput = window.innerHeight
+
+  //   console.log(heightOutput)
+
+  //   setHeightValue(heightValue)
+
+  //   return heightOutput
+  // }
+
+  // const [heightValue, setHeightValue] = React.useState()
+
+  // React.useEffect(() => {
+  //   window.addEventListener('resize', reportWindowHeight)
+  // }, [])
+
+  // React.useEffect(() => {
+  //   reportWindowHeight()
+  // }, [])
+
   const showHeader = router.pathname.includes('products') ? false : true
+
   return (
     <React.Fragment>
       {showHeader && <Header />}
 
       <div
         className={`flex flex-row ${
-          checkoutInitialized ? '  h-full ' : 'lg:max-h-screen '
+          checkoutInitialized ? '  h-full ' : 'lg:min-h-screen '
         }`}
       >
-        <div className="w-full lg:w-2/3 sticky top-0">{children}</div>
+        <div className="w-full lg:w-2/3">{children}</div>
         <Sidebar designs={designs} />
         <Modal />
         <LegalModal />

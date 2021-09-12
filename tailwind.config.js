@@ -14,6 +14,9 @@ module.exports = {
       width: {
         3733: '3733px'
       },
+      height: {
+        98.2: '98.2%'
+      },
       colors: {
         turquoise: {
           default: '#4ec5c1'

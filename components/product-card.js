@@ -82,7 +82,15 @@ function ProductCard({ id, media, name, price, permalink }) {
             </div>
           </a>
         </Link>
-        <div>
+        <div className="flex flex-col">
+          {/* <select
+            name="Select"
+            id="select"
+            className="text-center border-t-2 font-bold border-black"
+          >
+            <option value="physical">PHYSICAL</option>
+            <option value="digital">DIGITAL</option>
+          </select> */}
           <button
             onClick={() => addToCart(id)}
             className="hover:bg-black hover:text-white transition duration-300 ease-in-out text-center py-2 w-full border-t-2 font-bold border-black"

@@ -9,6 +9,7 @@ import { useSettingsContext } from '@/context/settings'
 
 import Logo from '../public/DMC-main-logo.png'
 import Meta from '@/components/seo-meta'
+import Footer from '@/components/footer'
 import { useEffect } from 'react'
 function IndexPage({ products, designs, policies }) {
   const { setDesigns, setPolicies } = useSettingsContext()
@@ -31,6 +32,7 @@ function IndexPage({ products, designs, policies }) {
       />
       <ProductGrid products={products} />
       <CheckoutForm />
+      {/* <Footer /> */}
     </>
   )
 }

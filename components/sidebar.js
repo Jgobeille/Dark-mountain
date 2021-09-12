@@ -34,8 +34,8 @@ function Sidebar({ designs }) {
     <div
       className={`sidebar  overflow-y-scroll scrollbar-hide items-center border-l-4 border-black right-0 w-full md:w-1/2 bg-white lg:block lg:w-1/3 
       ${widthOutputNum < 1024 ? 'lg:block ' : ''}
-      ${active ? 'absolute ' : ' hidden '}
-      ${checkoutInitialized ? '  h-full ' : ' h-full lg:h-auto '} 
+      ${active ? 'absolute h-98.2' : ' hidden '}
+      ${checkoutInitialized && widthOutputNum > 1024 ? ' ' : ' h-98.2'} 
        `}
     >
       <div className="border-black">
