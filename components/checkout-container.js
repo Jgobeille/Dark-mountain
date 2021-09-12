@@ -254,8 +254,6 @@ const CheckoutForm = () => {
 
         // Clear the cart
         refreshCart()
-        // Send the user to the receipt
-        window.sessionStorage.setItem('order_receipt', JSON.stringify(order))
       })
       .catch((error) => {
         const allErrors = []
