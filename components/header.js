@@ -24,14 +24,14 @@ function Header({ pages = [] }) {
   useEffect(() => {
     window.addEventListener('resize', reportWindowSize)
 
-    if (widthOutputNum > 1024) {
-      setActive(false)
-    }
-
     return () => {
       window.removeEventListener('resize', reportWindowSize)
     }
-  }, [widthOutputNum])
+  }, [])
+
+  useEffect(() => {
+    reportWindowSize()
+  }, [])
 
   return (
     <>

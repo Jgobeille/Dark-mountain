@@ -12,7 +12,7 @@ import generateCheckoutToken from '@/utils/generateCheckoutToken'
 import { clearConfigCache } from 'prettier'
 
 function ProductCard({ product }) {
-  const [selected, setSelected] = useState()
+  const [selected, setSelected] = useState('physical')
   const {
     activeCurrency,
     addToCartStatus,
@@ -42,6 +42,10 @@ function ProductCard({ product }) {
         cart.line_items,
         cart.id
       )
+
+      setTimeout(() => {
+        setAddToCartStatus({ id, message: 'ADD TO CART' })
+      }, 1500)
     } catch (error) {
       console.error(error.message)
     }
@@ -110,7 +114,7 @@ function ProductCard({ product }) {
           >
             {product[0].id === addToCartStatus.id
               ? addToCartStatus.message
-              : product[0].id === addToCartStatus.id
+              : product[1].id === addToCartStatus.id
               ? addToCartStatus.message
               : 'ADD TO CART'}
           </button>

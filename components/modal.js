@@ -42,11 +42,11 @@ const CartItem = ({ id, name, quantity, line_total, media }) => {
     commerce.cart.update(id, { quantity: quantity + 1 }).then(handleUpdateCart)
   return (
     <div className="flex xs:flex-col flex-row md:justify-start my-4 mx-6">
-      <div>
-        <img className="h-32 w-32 mr-4" src={media.source} alt="" />
+      <div className="min-w-max">
+        <img className="h-32 w-32 mr-4 min-w-min" src={media.source} alt="" />
       </div>
       <div className="flex flex-col flex-grow justify-around">
-        <p className="sm:text-xl md:text-2xl lg:text-3xl break-words font-bold">
+        <p className="sm:text-lg md:text-xl lg:text-2xl break-words font-bold">
           {name.toUpperCase()}
         </p>
         <div className="flex flex-col">
@@ -158,7 +158,7 @@ const Modal = () => {
             <CartItem key={item.id} {...item} />
           ))}
 
-          <div className=" flex flex-col border-t-2 border-black sm:text-xl md:text-2xl lg:text-3xl font-bold pl-4 pr-6 py-4">
+          <div className=" flex flex-col border-t-2 border-black sm:text-lg md:text-xl lg:text-2xl font-bold pl-4 pr-6 py-4">
             <div className="flex flex-row justify-between">
               <p>
                 <strong>SUB TOTAL:</strong>
