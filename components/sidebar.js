@@ -9,8 +9,13 @@ import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
-function Sidebar({ designs }) {
-  const { setActive, active, checkoutInitialized } = useSettingsContext()
+function Sidebar() {
+  const {
+    designs,
+    setActive,
+    active,
+    checkoutInitialized
+  } = useSettingsContext()
 
   const [widthOutputNum, setWidthOutputNum] = useState()
 
@@ -27,6 +32,10 @@ function Sidebar({ designs }) {
 
     if (widthOutputNum > 1024) {
       setActive(false)
+    }
+
+    return () => {
+      window.removeEventListener('resize', reportWindowSize)
     }
   }, [widthOutputNum])
 

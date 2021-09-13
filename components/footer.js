@@ -9,14 +9,14 @@ function Footer() {
       aria-labelledby="footerHeading"
     >
       <div className="py-4 mx-auto overflow-hidden border-b-2">
-        <div className="flex justify-center w-3733 pl-6  overflow-hidden">
-          <div className=" flex flex-row whitespace-nowrap animate-scroll slide-track ">
+        <div className="flex justify-center w-3733 overflow-hidden">
+          <div className=" flex flex-row animate-scroll slide-track w-full">
             <div
               onClick={() => {
                 setLegalModal(true)
                 setSelectedPolicy('return')
               }}
-              className="mx-2 text-lg font-bold cursor-pointer"
+              className="mr-2 text-lg font-bold cursor-pointer"
             >
               Return Policy
             </div>

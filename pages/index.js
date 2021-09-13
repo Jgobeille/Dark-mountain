@@ -17,9 +17,8 @@ function IndexPage({ products, designs, policies }) {
   useEffect(() => {
     const policiesToArray = Object.values(policies)
     setPolicies(policiesToArray)
-  }, [setPolicies])
-
-  setDesigns(designs)
+    setDesigns(designs)
+  }, [setPolicies, setDesigns])
 
   return (
     <>
@@ -32,7 +31,6 @@ function IndexPage({ products, designs, policies }) {
       />
       <ProductGrid products={products} />
       <CheckoutForm />
-      {/* <Footer /> */}
     </>
   )
 }

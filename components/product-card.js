@@ -1,3 +1,5 @@
+import React, { useState } from 'react'
+
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -7,8 +9,10 @@ import { useSettingsContext } from '@/context/settings'
 import commerce from '@/lib/commerce'
 import { useCartDispatch } from '@/context/cart'
 import generateCheckoutToken from '@/utils/generateCheckoutToken'
+import { clearConfigCache } from 'prettier'
 
-function ProductCard({ id, media, name, price, permalink }) {
+function ProductCard({ product }) {
+  const [selected, setSelected] = useState()
   const {
     activeCurrency,
     addToCartStatus,
@@ -46,29 +50,29 @@ function ProductCard({ id, media, name, price, permalink }) {
   return (
     <article
       className="border-4 border-black shadow-brutalist-lg transform transition duration-500 lg:hover:shadow-brutalist-xl lg:hover:scale-110"
-      key={id}
+      key={`${product[0].id}&&${product[1].id}`}
     >
       <>
-        <Link href={`/products/${permalink}`}>
+        <Link href={`/products/${product[0].permalink}`}>
           <a>
             <div className="text-left ml-2 mt-2 absolute z-10 ">
               <p className="text-black font-bold text-lg lg:text-xl">
                 {formatCurrencyValue({
                   currency: activeCurrency,
-                  value: price.formatted * 100
+                  value: product[0].price.formatted * 100
                 })}
               </p>
             </div>
 
             <div className="bg-gray-50 cursor-pointer w-full overflow-hidden relative">
-              {media ? (
+              {product[0].media ? (
                 <div className=" relative text-center">
                   <Image
-                    src={media.source}
+                    src={product[0].media.source}
                     height={250}
                     width={250}
-                    alt={name}
-                    title={name}
+                    alt={product[0].name}
+                    title={product[0].name}
                   />
 
                   <div
@@ -83,19 +87,30 @@ function ProductCard({ id, media, name, price, permalink }) {
           </a>
         </Link>
         <div className="flex flex-col">
-          {/* <select
+          <select
             name="Select"
             id="select"
             className="text-center border-t-2 font-bold border-black"
+            onChange={(e) => {
+              setSelected(e.target.value)
+            }}
           >
             <option value="physical">PHYSICAL</option>
             <option value="digital">DIGITAL</option>
-          </select> */}
+          </select>
           <button
-            onClick={() => addToCart(id)}
+            onClick={() => {
+              if (selected === 'physical') {
+                addToCart(product[0].id)
+              } else {
+                addToCart(product[1].id)
+              }
+            }}
             className="hover:bg-black hover:text-white transition duration-300 ease-in-out text-center py-2 w-full border-t-2 font-bold border-black"
           >
-            {id === addToCartStatus.id
+            {product[0].id === addToCartStatus.id
+              ? addToCartStatus.message
+              : product[0].id === addToCartStatus.id
               ? addToCartStatus.message
               : 'ADD TO CART'}
           </button>

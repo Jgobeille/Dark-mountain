@@ -14,27 +14,7 @@ import { useSettingsContext } from '@/context/settings'
 function Layout({ children, footer, navigation }) {
   const router = useRouter()
 
-  const { designs, checkoutInitialized } = useSettingsContext()
-
-  // const reportWindowHeight = () => {
-  //   const heightOutput = window.innerHeight
-
-  //   console.log(heightOutput)
-
-  //   setHeightValue(heightValue)
-
-  //   return heightOutput
-  // }
-
-  // const [heightValue, setHeightValue] = React.useState()
-
-  // React.useEffect(() => {
-  //   window.addEventListener('resize', reportWindowHeight)
-  // }, [])
-
-  // React.useEffect(() => {
-  //   reportWindowHeight()
-  // }, [])
+  const { checkoutInitialized } = useSettingsContext()
 
   const showHeader = router.pathname.includes('products') ? false : true
 
@@ -48,7 +28,7 @@ function Layout({ children, footer, navigation }) {
         }`}
       >
         <div className="w-full lg:w-2/3">{children}</div>
-        <Sidebar designs={designs} />
+        <Sidebar />
         <Modal />
         <LegalModal />
       </div>
