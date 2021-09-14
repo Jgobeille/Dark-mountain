@@ -181,7 +181,7 @@ const CheckoutForm = () => {
           country: values.shippingCountry
         },
         fulfillment: {
-          shipping_method: shippingValues.shippingOption.id
+          shipping_method: shippingValues?.shippingOption?.id || null
         },
         payment: {
           gateway: 'stripe',
@@ -312,7 +312,11 @@ const CheckoutForm = () => {
       billingPostalZipCode: Yup.number().required('Required')
     }),
     onSubmit: (values) => {
-      handleCaptureCheckout(values)
+      if (checkoutToken) {
+        handleCaptureCheckout(values)
+      } else {
+        setErrors(['There are no items in your cart!'])
+      }
     }
   })
 
@@ -856,16 +860,26 @@ const CheckoutForm = () => {
                               >
                                 Select a shipping method
                               </option>
-                              {shippingValues.shippingOptions.map(
-                                (method, index) => {
-                                  return (
-                                    <option
-                                      className="checkout__select-option"
-                                      value={method.id}
-                                      key={index}
-                                    >{`${method.description} - $${method.price.formatted_with_code}`}</option>
-                                  )
-                                }
+                              {shippingValues.shippingOptions.length > 0 ? (
+                                shippingValues.shippingOptions.map(
+                                  (method, index) => {
+                                    return (
+                                      <option
+                                        className="checkout__select-option"
+                                        value={method.id}
+                                        key={index}
+                                      >{`${method.description} - $${method.price.formatted_with_code}`}</option>
+                                    )
+                                  }
+                                )
+                              ) : (
+                                <option
+                                  className="checkout__select-option"
+                                  value={'Free'}
+                                  key={1}
+                                >
+                                  No shipping for digital items
+                                </option>
                               )}
                               ;
                             </select>
@@ -930,23 +944,35 @@ const CheckoutForm = () => {
                           ))}
                           <div className="flex flex-row border-t-2 border-black justify-between m-2">
                             <h3 className="text-lg uppercase">Shipping</h3>
-                            <p className="text-lg">
-                              {
-                                shippingValues?.shippingOption?.price
-                                  ?.formatted_with_symbol
-                              }
-                            </p>
+
+                            {shippingValues?.shippingOption?.price ? (
+                              <p className="text-lg">
+                                {
+                                  shippingValues?.shippingOption?.price
+                                    ?.formatted_with_symbol
+                                }
+                              </p>
+                            ) : (
+                              <p className="text-lg">Free</p>
+                            )}
                           </div>
                           <div className="flex flex-row  justify-between m-2">
                             <h3 className="text-lg uppercase font-bold ">
                               total
                             </h3>
-                            <p className="text-lg font-bold">
-                              {`$${
-                                subtotal?.raw +
-                                shippingValues?.shippingOption?.price?.raw
-                              }`}
-                            </p>
+
+                            {shippingValues?.shippingOption?.price ? (
+                              <p className="text-lg font-bold">
+                                {`$${
+                                  subtotal?.raw +
+                                  shippingValues?.shippingOption?.price?.raw
+                                }`}
+                              </p>
+                            ) : (
+                              <p className="text-lg font-bold">
+                                {`$${subtotal?.raw}`}
+                              </p>
+                            )}
                           </div>
                         </div>
                         <div className="py-6 lg:col-span-2">

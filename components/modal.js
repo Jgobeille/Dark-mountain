@@ -4,6 +4,7 @@ import { useCartDispatch, useCartState } from '@/context/cart'
 import commerce from '@/lib/commerce'
 import fetchShippingOptionsAndSubdivisions from '@/utils/fetchShippingOptionsAndSubdivisions'
 import generateCheckoutToken from '@/utils/generateCheckoutToken'
+import { useEffect } from 'react'
 
 const CartItem = ({ id, name, quantity, line_total, media }) => {
   const {
@@ -118,11 +119,18 @@ const Modal = () => {
 
   const isEmpty = line_items.length === 0
 
+  useEffect(() => {
+    if (isEmpty) {
+      setCheckoutToken()
+    }
+  }, [isEmpty])
+
   const showHideClassName = modal ? 'modal block' : 'modal hidden'
 
   const emptyCart = () => {
     setAddToCartStatus('ADD TO CART')
     commerce.cart.empty().then(handleUpdateCart)
+    setCheckoutToken()
   }
 
   return (
