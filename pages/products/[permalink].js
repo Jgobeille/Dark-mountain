@@ -8,6 +8,8 @@ import commerce from '@/lib/commerce'
 import parse from 'html-react-parser'
 import { formatCurrencyValue } from '@/utils/format-currency-value'
 const { useSettingsContext } = require('@/context/settings')
+import CheckoutForm from '@/components/checkout-container'
+import getPolicies from '@/lib/get-policies'
 
 import {
   FacebookShareButton,
@@ -23,13 +25,16 @@ import {
 export async function getStaticProps({ params }) {
   const { permalink } = params
 
+  const { policies } = await getPolicies()
+
   const product = await commerce.products.retrieve(permalink, {
     type: 'permalink'
   })
 
   return {
     props: {
-      product
+      product,
+      policies
     }
   }
 }
@@ -47,11 +52,11 @@ export async function getStaticPaths() {
   }
 }
 
-export default function ProductPage({ product }) {
+export default function ProductPage({ product, policies }) {
   const { activeCurrency } = useSettingsContext()
   const router = useRouter()
 
-  console.log(product.description)
+  console.log(policies)
   return (
     <div>
       <Meta
@@ -61,25 +66,20 @@ export default function ProductPage({ product }) {
         css="styles/styles.css"
         image={product.media.source}
       />
-      <div className="modal block lg:fixed top-0 left-0 w-full h-full bg-black z-50">
-        <section className="flex flex-col lg:flex-row md:mx-32 lg:mx-0 lg:absolute lg:fixed bg-white lg:w-4/5 h-full lg:h-auto lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2">
-          <div className="flex flex-row w-full justify-center">
-            <Link href={`/`}>
-              <a className="lg:hidden absolute m-4 text-xl z-10 right-0 md:right-32">
-                X
-              </a>
-            </Link>
+      <div className="w-full blur bg-opacity-20 bg-black z-50">
+        <section className="flex flex-col lg:flex-row lg:mx-0 min-h-screen s bg-white  h-full  ">
+          <div className="lg:w-1/2 ">
             <Image
-              className="visible lg:w-1/2"
               src={product.media.source}
-              height={500}
-              width={500}
+              height={150}
+              width={200}
               alt="product Image"
               title="Product Image"
+              layout="responsive"
             />
           </div>
 
-          <div className="flex flex-col flex-grow lg:w-full lg:border-l-2  border-black">
+          <div className="flex flex-col flex-grow w-full lg:w-1/2 lg:border-l-2  border-black">
             <div className="flex flex-row justify-between border-b-2 p-2 border-black">
               <h3 className="uppercase">{product.name}</h3>
               <Link href={`/`}>
@@ -119,7 +119,7 @@ export default function ProductPage({ product }) {
                     className="mr-2"
                   />
                 </RedditShareButton>
-                <PinterestShareButton
+                {/* <PinterestShareButton
                   url={`https://dark-mountain.vercel.app${router.asPath}`}
                 >
                   <PinterestIcon
@@ -127,7 +127,7 @@ export default function ProductPage({ product }) {
                     bgStyle={{ fill: 'black' }}
                     round="true"
                   />
-                </PinterestShareButton>
+                </PinterestShareButton> */}
               </div>
             </div>
             <div className="flex flex-row border-b-2 border-black ">
@@ -150,18 +150,11 @@ export default function ProductPage({ product }) {
                 SHIPPING AND RETURNS
               </h3>
               <div className="py-4 px-4">
-                <ul>
-                  <li>No</li>
-                  <li className="break-all">
-                    You can ship items back at your own cost for a full no
-                    refund
-                  </li>
-                  <li>Just messing with you...</li>
-                  <li>No refunds. EVER.</li>
-                </ul>
+                {parse(policies.returnsPolicy.policyDescription)}
               </div>
             </div>
           </div>
+          <CheckoutForm />
         </section>
       </div>
     </div>

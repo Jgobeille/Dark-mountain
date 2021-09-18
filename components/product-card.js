@@ -57,7 +57,13 @@ function ProductCard({ product }) {
       key={`${product[0].id}&&${product[1].id}`}
     >
       <>
-        <Link href={`/products/${product[0].permalink}`}>
+        <Link
+          href={
+            selected === 'physical'
+              ? `/products/${product[0].permalink}`
+              : `/products/${product[1].permalink}`
+          }
+        >
           <a>
             <div className="text-left ml-2 mt-2 absolute z-10 ">
               <p className="text-black font-bold text-lg lg:text-xl">

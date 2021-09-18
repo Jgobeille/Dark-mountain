@@ -20,17 +20,26 @@ function Layout({ children, footer, navigation }) {
 
   return (
     <React.Fragment>
-      {showHeader && <Header />}
+      <Header />
 
       <div
         className={`flex flex-row ${
           checkoutInitialized ? '  h-full ' : 'lg:min-h-screen '
         }`}
       >
-        <div className="w-full lg:w-2/3">{children}</div>
-        <Sidebar />
+        <div className={showHeader ? 'w-full lg:w-2/3' : 'w-full'}>
+          {children}
+        </div>
+
         <Modal />
         <LegalModal />
+        {showHeader ? (
+          <>
+            <Sidebar />
+          </>
+        ) : (
+          ''
+        )}
       </div>
       <Footer {...footer} />
     </React.Fragment>

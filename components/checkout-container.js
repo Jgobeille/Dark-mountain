@@ -22,7 +22,6 @@ const ThankyouPage = () => {
     setCheckoutInitialized
   } = useSettingsContext()
 
-  console.log(order)
   return (
     <>
       <div
