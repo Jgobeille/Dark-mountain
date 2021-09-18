@@ -84,7 +84,7 @@ const Form = () => {
             <input
               className={
                 errors.name
-                  ? 'border-4 border-red-500 mb-2 w-full'
+                  ? 'border-4 border-red-500 mb-4 p-2 w-full'
                   : 'border-4 border-black mb-4 p-2 w-full'
               }
               type="name"
@@ -103,7 +103,7 @@ const Form = () => {
             <input
               className={
                 errors.email
-                  ? 'border-4 border-red-500 mb-2 w-full'
+                  ? 'border-4 border-red-500 mb-4 w-full'
                   : 'border-4 border-black mb-4 w-full'
               }
               type="email"
@@ -126,8 +126,8 @@ const Form = () => {
               cols="33"
               className={
                 errors.message
-                  ? 'border-4 border-red-500 mb-2 w-full'
-                  : 'border-4 border-black mb-2 w-full'
+                  ? 'border-4 border-red-500 mb-4 w-full'
+                  : 'border-4 border-black mb-4 w-full'
               }
               type="message"
               name="message"

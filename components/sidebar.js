@@ -41,7 +41,7 @@ function Sidebar() {
 
   return (
     <div
-      className={`sidebar  overflow-y-scroll scrollbar-hide items-center border-l-4 border-black right-0 w-full md:w-1/2 bg-white lg:block lg:w-1/3 z-50
+      className={`sidebar  overflow-y-scroll scrollbar-hide items-center border-l-4 border-black right-0 w-full md:w-1/2 bg-white lg:block lg:w-1/3 z-40
       ${widthOutputNum < 1024 ? 'lg:block ' : ''}
       ${active ? 'absolute h-98.2' : ' hidden '}
       ${checkoutInitialized && widthOutputNum > 1024 ? ' ' : ' h-98.2'} 

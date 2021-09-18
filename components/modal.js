@@ -135,7 +135,7 @@ const Modal = () => {
 
   return (
     <div
-      className={`${showHideClassName} absolute w-full right-0 md:fixed top-0 md:top-2 md:right-8 sm:w-auto  z-50`}
+      className={`${showHideClassName}  w-full right-0 fixed top-0 md:top-2 md:right-8 sm:w-auto  z-50`}
     >
       {isEmpty ? (
         <section className="bg-turquoise-default border-4 border-black  md:shadow-brutalist-lg">

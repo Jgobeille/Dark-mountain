@@ -14,6 +14,8 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 
 import StripeLogo from 'components/stripeLogo.js'
 
+import { useRouter } from 'next/router'
+
 const ThankyouPage = () => {
   const {
     checkoutRef,
@@ -86,6 +88,7 @@ const ThankyouPage = () => {
 const CheckoutForm = () => {
   const stripe = useStripe()
   const elements = useElements()
+  const router = useRouter()
   const {
     checkoutToken,
     shippingValues,
@@ -103,13 +106,11 @@ const CheckoutForm = () => {
 
   const [errors, setErrors] = useState()
 
-  const usePrevious = (value) => {
-    const ref = useRef()
-    useEffect(() => {
-      ref.current = value
-    })
-    return ref.current
-  }
+  const [purchaseButtonMessage, setPurchaseButtonMessage] = useState(
+    'COMPLETE PURCHASE'
+  )
+
+  const isProductsPage = router.pathname.includes('products') ? true : false
 
   const sanitizedLineItems = (lineItems) => {
     return lineItems.reduce((data, lineItem) => {
@@ -246,7 +247,9 @@ const CheckoutForm = () => {
    * @param {string} checkoutTokenId The ID of the checkout token
    * @param {object} newOrder The new order object data
    */
+
   const onCaptureCheckout = (checkoutTokenId, newOrder) => {
+    setPurchaseButtonMessage('PURCHASING...')
     commerce.checkout
       .capture(checkoutTokenId, newOrder)
       .then((order) => {
@@ -255,6 +258,7 @@ const CheckoutForm = () => {
 
         // Clear the cart
         refreshCart()
+        setPurchaseButtonMessage('COMPLETE PURCHASE')
       })
       .catch((error) => {
         const allErrors = []
@@ -270,6 +274,7 @@ const CheckoutForm = () => {
           }
 
           setErrors([...allErrors])
+          setPurchaseButtonMessage('COMPLETE PURCHASE')
         }
       })
   }
@@ -279,38 +284,30 @@ const CheckoutForm = () => {
   const formik = useFormik({
     initialValues: {
       // Customer details
-      firstName: 'Jane',
-      lastName: 'Doe',
-      email: 'janedoe@email.com',
+      firstName: '',
+      lastName: '',
+      email: '',
       // Shipping details
-      shippingName: 'Jane Doe',
-      shippingStreet: '123 Fake St',
+      shippingName: '',
+      shippingStreet: '',
       shippingApartment: '',
-      shippingCity: 'San Francisco',
-      shippingStateProvince: 'CA',
-      shippingPostalZipCode: '94107',
+      shippingCity: '',
+      shippingStateProvince: '',
+      shippingPostalZipCode: '',
       shippingCountry: 'US',
       billingAddress: 'same',
-      billingName: 'Jane Doe',
-      billingStreet: '123 Fake St',
+      billingName: '',
+      billingStreet: '',
       billingApartment: '',
-      billingCity: 'San Francisco',
-      billingStateProvince: 'CA',
-      billingPostalZipCode: '94107',
-      billingCountry: ''
+      billingCity: '',
+      billingStateProvince: '',
+      billingPostalZipCode: '',
+      billingCountry: 'US'
     },
-    validationSchema: Yup.object({
-      firstName: Yup.string().required('Required'),
-      lastName: Yup.string().required('Required'),
-      email: Yup.string().email('Invalid email address').required('Required'),
-      shippingStreet: Yup.string().required('Required'),
-      shippingCity: Yup.string().required('Required'),
-      shippingPostalZipCode: Yup.number().required('Required'),
-      billingStreet: Yup.string().required('Required'),
-      billingCity: Yup.string().required('Required'),
-      billingPostalZipCode: Yup.number().required('Required')
-    }),
+
     onSubmit: (values) => {
+      values.shippingName = `${values.firstName} ${values.lastName}`
+      values.billingName = `${values.firstName} ${values.lastName}`
       if (checkoutToken) {
         handleCaptureCheckout(values)
       } else {
@@ -342,14 +339,6 @@ const CheckoutForm = () => {
     )
   }
 
-  const prevShipping = usePrevious(formik.values.shippingCountry)
-
-  // useEffect(() => {
-  //   if (prevShipping !== formik.values.shippingCountry) {
-  //     fetchShippingOptions(checkoutToken?.id, formik.values.shippingCountry)
-  //   }
-  // }, [formik.values.shippingCountry])
-
   return (
     <>
       {order ? (
@@ -364,7 +353,13 @@ const CheckoutForm = () => {
               CHECKOUT
             </h1>
           </div>
-          <div className="px-10 md:px-20 py-10 w-full  ">
+          <div
+            className={
+              isProductsPage
+                ? `px-10 md:px-40 lg:px-64 py-10 w-full `
+                : `px-10 md:px-20 py-10 w-full `
+            }
+          >
             <div className="mt-10 sm:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-6">
                 <div className="mt-5 md:mt-0 md:col-span-2">
@@ -462,7 +457,7 @@ const CheckoutForm = () => {
                               type="text"
                               name="shippingStreet"
                               id="shippingStreet"
-                              autoComplete="shippingStreet"
+                              autoComplete="street-address"
                               value={formik.values.shippingStreet}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
@@ -542,15 +537,19 @@ const CheckoutForm = () => {
                               }}
                             >
                               <option disabled>Country</option>
-                              {Object.keys(
-                                shippingValues.shippingCountries
-                              ).map((index) => {
-                                return (
-                                  <option value={index} key={index}>
-                                    {shippingValues.shippingCountries[index]}
-                                  </option>
-                                )
-                              })}
+                              {shippingValues.shippingCountries.length >= 1 ? (
+                                Object.keys(
+                                  shippingValues.shippingCountries
+                                ).map((index) => {
+                                  return (
+                                    <option value={index} key={index}>
+                                      {shippingValues.shippingCountries[index]}
+                                    </option>
+                                  )
+                                })
+                              ) : (
+                                <option value={'US'}>United States</option>
+                              )}
                               ;
                             </select>
                           </div>
@@ -567,7 +566,6 @@ const CheckoutForm = () => {
                               name="shippingStateProvince"
                               type="text"
                               id="shippingStateProvince"
-                              autoComplete="shippingStateProvince"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               className={
@@ -598,7 +596,7 @@ const CheckoutForm = () => {
                               type="text"
                               name="shippingPostalZipCode"
                               id="shippingPostalZipCode"
-                              autoComplete="shippingPostalZipCode"
+                              autoComplete="postal-code"
                               value={formik.values.shippingPostalZipCode}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
@@ -667,8 +665,12 @@ const CheckoutForm = () => {
                                   type="text"
                                   name="billingStreet"
                                   id="billingStreet"
-                                  autoComplete="billingStreet"
-                                  value={formik.values.billingStreet}
+                                  autoComplete="street-address"
+                                  value={
+                                    formik.values.billingAddress === 'different'
+                                      ? formik.values.billingStreet
+                                      : formik.values.shippingStreet
+                                  }
                                   onChange={formik.handleChange}
                                   onBlur={formik.handleBlur}
                                   className={
@@ -708,7 +710,11 @@ const CheckoutForm = () => {
                                   type="text"
                                   name="billingCity"
                                   id="billingCity"
-                                  value={formik.values.billingCity}
+                                  value={
+                                    formik.values.billingAddress === 'different'
+                                      ? formik.values.billingCity
+                                      : formik.values.shippingCity
+                                  }
                                   onChange={formik.handleChange}
                                   onBlur={formik.handleBlur}
                                   className={
@@ -747,19 +753,24 @@ const CheckoutForm = () => {
                                   }}
                                 >
                                   <option disabled>Country</option>
-                                  {Object.keys(
-                                    shippingValues.shippingCountries
-                                  ).map((index) => {
-                                    return (
-                                      <option value={index} key={index}>
-                                        {
-                                          shippingValues.shippingCountries[
-                                            index
-                                          ]
-                                        }
-                                      </option>
-                                    )
-                                  })}
+                                  {shippingValues.shippingCountries.length >=
+                                  1 ? (
+                                    Object.keys(
+                                      shippingValues.shippingCountries
+                                    ).map((index) => {
+                                      return (
+                                        <option value={index} key={index}>
+                                          {
+                                            shippingValues.shippingCountries[
+                                              index
+                                            ]
+                                          }
+                                        </option>
+                                      )
+                                    })
+                                  ) : (
+                                    <option value={'US'}>United States</option>
+                                  )}
                                   ;
                                 </select>
                               </div>
@@ -811,8 +822,12 @@ const CheckoutForm = () => {
                                   type="text"
                                   name="billingPostalZipCode"
                                   id="billingPostalZipCode"
-                                  autoComplete="billingPostalZipCode"
-                                  value={formik.values.billingPostalZipCode}
+                                  autoComplete="postal-code"
+                                  value={
+                                    formik.values.billingAddress === 'different'
+                                      ? formik.values.billingPostalZipCode
+                                      : formik.values.shippingPostalZipCode
+                                  }
                                   onChange={formik.handleChange}
                                   onBlur={formik.handleBlur}
                                   className={
@@ -979,7 +994,7 @@ const CheckoutForm = () => {
                             type="submit"
                             className="border-4 shadow-brutalist-sm p-2 border-black hover:bg-black hover:text-white transition duration-300 ease-in-out"
                           >
-                            COMPLETE PURCHASE
+                            {purchaseButtonMessage}
                           </button>
                           <div className="mt-10 w-48">
                             <StripeLogo className="text-lg" />

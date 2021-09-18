@@ -39,6 +39,10 @@ sidebar {
   top: 10vh;
 }
 
+.grecaptcha-badge {
+  z-index: 100;
+}
+
 @keyframes tilt {
   0% {
     transform: rotate(0);

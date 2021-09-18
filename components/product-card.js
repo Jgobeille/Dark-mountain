@@ -6,10 +6,9 @@ import Image from 'next/image'
 import { formatCurrencyValue } from '@/utils/format-currency-value'
 import { useSettingsContext } from '@/context/settings'
 
-import commerce from '@/lib/commerce'
 import { useCartDispatch } from '@/context/cart'
 import generateCheckoutToken from '@/utils/generateCheckoutToken'
-import { clearConfigCache } from 'prettier'
+import addToCart from '@/utils/addToCart'
 
 function ProductCard({ product }) {
   const [selected, setSelected] = useState('physical')
@@ -25,31 +24,6 @@ function ProductCard({ product }) {
     setActive
   } = useSettingsContext()
   const { setCart } = useCartDispatch()
-
-  const addToCart = async (id) => {
-    try {
-      setAddToCartStatus({ id, message: 'ADDING TO CART...' })
-      const { cart } = await commerce.cart.add(id)
-
-      setAddToCartStatus({ id, message: 'ADDED TO CART!' })
-      setCart(cart)
-      generateCheckoutToken(
-        setCheckoutToken,
-        shippingValues,
-        setShippingValues,
-        billingValues,
-        setBillingValues,
-        cart.line_items,
-        cart.id
-      )
-
-      setTimeout(() => {
-        setAddToCartStatus({ id, message: 'ADD TO CART' })
-      }, 1500)
-    } catch (error) {
-      console.error(error.message)
-    }
-  }
 
   return (
     <article
@@ -111,9 +85,29 @@ function ProductCard({ product }) {
           <button
             onClick={() => {
               if (selected === 'physical') {
-                addToCart(product[0].id)
+                addToCart(
+                  product[0].id,
+                  setAddToCartStatus,
+                  setCart,
+                  generateCheckoutToken,
+                  setCheckoutToken,
+                  shippingValues,
+                  setShippingValues,
+                  billingValues,
+                  setBillingValues
+                )
               } else {
-                addToCart(product[1].id)
+                addToCart(
+                  product[1].id,
+                  setAddToCartStatus,
+                  setCart,
+                  generateCheckoutToken,
+                  setCheckoutToken,
+                  shippingValues,
+                  setShippingValues,
+                  billingValues,
+                  setBillingValues
+                )
               }
             }}
             className="hover:bg-black hover:text-white transition duration-300 ease-in-out text-center py-2 w-full border-t-2 font-bold border-black"

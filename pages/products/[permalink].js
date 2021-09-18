@@ -1,5 +1,5 @@
 // pages/products/[permalink].js
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Meta from '@/components/seo-meta.js'
@@ -21,6 +21,9 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
+import { useCartDispatch } from '@/context/cart'
+import addToCart from '@/utils/addToCart'
+import generateCheckoutToken from '@/utils/generateCheckoutToken'
 
 export async function getStaticProps({ params }) {
   const { permalink } = params
@@ -53,10 +56,25 @@ export async function getStaticPaths() {
 }
 
 export default function ProductPage({ product, policies }) {
-  const { activeCurrency } = useSettingsContext()
   const router = useRouter()
 
-  console.log(policies)
+  const {
+    activeCurrency,
+    addToCartStatus,
+    setAddToCartStatus,
+    setCheckoutToken,
+    shippingValues,
+    setShippingValues,
+    billingValues,
+    setBillingValues,
+    setCheckoutInitialized
+  } = useSettingsContext()
+  const { setCart } = useCartDispatch()
+
+  useEffect(() => {
+    setCheckoutInitialized(false)
+  }, [])
+
   return (
     <div>
       <Meta
@@ -66,9 +84,9 @@ export default function ProductPage({ product, policies }) {
         css="styles/styles.css"
         image={product.media.source}
       />
-      <div className="w-full blur bg-opacity-20 bg-black z-50">
+      <div className="w-full ">
         <section className="flex flex-col lg:flex-row lg:mx-0 min-h-screen s bg-white  h-full  ">
-          <div className="lg:w-1/2 ">
+          <div className="lg:w-1/2 md:px-24 border-b-2 lg:border-b-0 border-black">
             <Image
               src={product.media.source}
               height={150}
@@ -80,13 +98,41 @@ export default function ProductPage({ product, policies }) {
           </div>
 
           <div className="flex flex-col flex-grow w-full lg:w-1/2 lg:border-l-2  border-black">
-            <div className="flex flex-row justify-between border-b-2 p-2 border-black">
+            <div className="flex flex-row border-black ">
+              <p className="text-black text-center font-bold p-2 w-1/2">
+                {formatCurrencyValue({
+                  currency: activeCurrency,
+                  value: product.price.formatted * 100
+                })}
+              </p>
+              <button
+                onClick={() => {
+                  addToCart(
+                    product.id,
+                    setAddToCartStatus,
+                    setCart,
+                    generateCheckoutToken,
+                    setCheckoutToken,
+                    shippingValues,
+                    setShippingValues,
+                    billingValues,
+                    setBillingValues
+                  )
+                }}
+                className="w-1/2 hover:bg-black hover:text-white bg-turquoise-default transition duration-300 ease-in-out text-center py-2  border-l-2 border-black font-bold "
+              >
+                {product.id === addToCartStatus.id
+                  ? addToCartStatus.message
+                  : 'ADD TO CART'}
+              </button>
+            </div>
+            <div className="flex flex-row justify-between border-t-2 border-b-2 p-2 border-black">
               <h3 className="uppercase">{product.name}</h3>
               <Link href={`/`}>
                 <a className="mr-2 hidden lg:block ">X</a>
               </Link>
             </div>
-            <div className="flex flex-row border-b-2 border-black items-center p-2">
+            <div className="flex flex-row border-black items-center p-2">
               <h3 className="">SHARE</h3>
               <div className="flex flex-row mx-2">
                 <TwitterShareButton
@@ -130,17 +176,9 @@ export default function ProductPage({ product, policies }) {
                 </PinterestShareButton> */}
               </div>
             </div>
-            <div className="flex flex-row border-b-2 border-black ">
-              <h3 className="p-2">PRICE</h3>
-              <p className="text-black font-bold p-2">
-                {formatCurrencyValue({
-                  currency: activeCurrency,
-                  value: product.price.formatted * 100
-                })}
-              </p>
-            </div>
+
             <div>
-              <h3 className="flex-grow border-b-2 border-black p-2">
+              <h3 className="flex-grow border-b-2 border-t-2 border-black p-2">
                 PRODUCT DETAILS
               </h3>
               <div className="py-4 px-4">{parse(product.description)}</div>
@@ -154,8 +192,9 @@ export default function ProductPage({ product, policies }) {
               </div>
             </div>
           </div>
-          <CheckoutForm />
         </section>
+
+        <CheckoutForm />
       </div>
     </div>
   )

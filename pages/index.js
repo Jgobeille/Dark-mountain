@@ -12,13 +12,21 @@ import Meta from '@/components/seo-meta'
 import Footer from '@/components/footer'
 import { useEffect } from 'react'
 function IndexPage({ products, designs, policies }) {
-  const { setDesigns, setPolicies } = useSettingsContext()
+  const {
+    setDesigns,
+    setPolicies,
+    setCheckoutInitialized
+  } = useSettingsContext()
 
   useEffect(() => {
     const policiesToArray = Object.values(policies)
     setPolicies(policiesToArray)
     setDesigns(designs)
   }, [setPolicies, setDesigns])
+
+  useEffect(() => {
+    setCheckoutInitialized(false)
+  }, [])
 
   return (
     <>

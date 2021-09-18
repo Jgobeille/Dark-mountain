@@ -16,7 +16,7 @@ function Layout({ children, footer, navigation }) {
 
   const { checkoutInitialized } = useSettingsContext()
 
-  const showHeader = router.pathname.includes('products') ? false : true
+  const isProductsPage = router.pathname.includes('products') ? true : false
 
   return (
     <React.Fragment>
@@ -27,13 +27,13 @@ function Layout({ children, footer, navigation }) {
           checkoutInitialized ? '  h-full ' : 'lg:min-h-screen '
         }`}
       >
-        <div className={showHeader ? 'w-full lg:w-2/3' : 'w-full'}>
+        <div className={!isProductsPage ? 'w-full lg:w-2/3' : 'w-full'}>
           {children}
         </div>
 
         <Modal />
         <LegalModal />
-        {showHeader ? (
+        {!isProductsPage ? (
           <>
             <Sidebar />
           </>
