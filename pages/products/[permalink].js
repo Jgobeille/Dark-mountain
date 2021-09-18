@@ -99,7 +99,7 @@ export default function ProductPage({ product, policies }) {
 
           <div className="flex flex-col flex-grow w-full lg:w-1/2 lg:border-l-2  border-black">
             <div className="flex flex-row border-black ">
-              <p className="text-black text-center font-bold p-2 w-1/2">
+              <p className="text-black text-center font-bold py-6 w-1/2">
                 {formatCurrencyValue({
                   currency: activeCurrency,
                   value: product.price.formatted * 100
@@ -119,7 +119,7 @@ export default function ProductPage({ product, policies }) {
                     setBillingValues
                   )
                 }}
-                className="w-1/2 hover:bg-black hover:text-white bg-turquoise-default transition duration-300 ease-in-out text-center py-2  border-l-2 border-black font-bold "
+                className="w-1/2 hover:bg-black hover:text-white bg-turquoise-default transition duration-300 ease-in-out text-center py-4  border-l-2 border-black font-bold "
               >
                 {product.id === addToCartStatus.id
                   ? addToCartStatus.message
@@ -128,9 +128,6 @@ export default function ProductPage({ product, policies }) {
             </div>
             <div className="flex flex-row justify-between border-t-2 border-b-2 p-2 border-black">
               <h3 className="uppercase">{product.name}</h3>
-              <Link href={`/`}>
-                <a className="mr-2 hidden lg:block ">X</a>
-              </Link>
             </div>
             <div className="flex flex-row border-black items-center p-2">
               <h3 className="">SHARE</h3>
