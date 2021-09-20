@@ -6,9 +6,10 @@ sgMail.setApiKey(process.env.NEXT_PUBLIC_SENDGRID_API_KEY)
 
 export default async (req, res) => {
   try {
-    console.log(process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY)
     const body = JSON.parse(req.body)
     const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY
+
+    const base64 = body.file.toString('base64')
 
     const validateHuman = async (token) => {
       const res = await fetch(
@@ -34,13 +35,17 @@ export default async (req, res) => {
       to: 'djent34@gmail.com',
       from: 'djent34@gmail.com', // Use the email address or domain you verified above
       subject: 'Commission Request',
-      name: body.name,
-      email: body.email,
-      text: body.message,
-      file: body.file
+      html: `
+      <strong>Name: </strong><p>${body.name}</p>
+
+      <strong>Email: </strong><p>${body.email}</p>
+
+      <strong>Message:  </strong>
+      <div>${body.message}</div>
+ `
     }
 
-    mail.send(msg)
+    await mail.send(msg)
 
     res.status(200).json({
       message:

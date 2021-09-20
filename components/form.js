@@ -13,10 +13,11 @@ const Form = () => {
   return (
     <div className="mx-4 justify-center">
       <Formik
-        initialValues={{ name: '', email: '', message: '' }}
+        initialValues={{ name: '', email: '', message: '', file: null }}
         validateOnChange={false}
         validateOnBlur={false}
         validate={(values) => {
+          console.log(values)
           const errors = {}
           if (!values.name) {
             errors.name = 'Please enter your name!'
@@ -39,6 +40,15 @@ const Form = () => {
           setMessage(null)
           setSubmitting(false)
           try {
+            // function encodeImageFileAsURL(element) {
+            //   var reader = new FileReader()
+            //   reader.onloadend = function () {
+            //     values.file = reader.result
+            //   }
+            //   return reader.readAsDataURL(element)
+            // }
+            // encodeImageFileAsURL(values.file)
+
             const token = await reRef.current.executeAsync()
             reRef.current.reset()
 
@@ -67,11 +77,11 @@ const Form = () => {
         {({
           values,
           errors,
-          touched,
           handleChange,
           handleBlur,
           handleSubmit,
-          isSubmitting
+          isSubmitting,
+          setFieldValue
           /* and other goodies */
         }) => (
           <form className="px-10 py-6" onSubmit={handleSubmit}>
@@ -138,7 +148,7 @@ const Form = () => {
               onBlur={handleBlur}
               value={values.message}
             />
-            <div className="flex flex-column justify-between">
+            {/* <div className="flex flex-column justify-between">
               <label htmlFor="message">File</label>
               <div>*Optional</div>
             </div>
@@ -149,10 +159,10 @@ const Form = () => {
               id="file"
               name="file"
               accept="image/png, image/jpeg"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.file}
-            />
+              onChange={(event) => {
+                setFieldValue('file', event.currentTarget.files[0])
+              }}
+            /> */}
             <div className="mb-4 w-full">
               <div className="font-secondary text-red-600">
                 {error ? <p>Error: {error}</p> : ''}
