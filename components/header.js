@@ -63,7 +63,7 @@ function Header({ pages = [] }) {
             <div className="ml-auto flex flex-row justify-evenly">
               <div onClick={() => setModal(true)} className="">
                 <ShoppingCartIcon
-                  className="h-8 w-8 text-black"
+                  className="h-8 w-8 text-black cursor-pointer"
                   aria-hidden="true"
                 />
               </div>

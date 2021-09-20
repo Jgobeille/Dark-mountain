@@ -89,7 +89,7 @@ export default function ProductPage({ product, policies }) {
           <div className="lg:w-1/2 md:px-24 border-b-2 lg:border-b-0 border-black">
             <Image
               src={product.media.source}
-              height={150}
+              height={200}
               width={200}
               alt="product Image"
               title="Product Image"
