@@ -42,7 +42,7 @@ const CartItem = ({ id, name, quantity, line_total, media }) => {
   const incrementQuantity = () =>
     commerce.cart.update(id, { quantity: quantity + 1 }).then(handleUpdateCart)
   return (
-    <div className="flex xs:flex-col flex-row md:justify-start my-4 mx-6">
+    <div className="flex xs:flex-col flex-row md:justify-start my-4 mx-6 ">
       <div className="min-w-max">
         <img className="h-32 w-32 mr-4 min-w-min" src={media.source} alt="" />
       </div>
@@ -135,10 +135,10 @@ const Modal = () => {
 
   return (
     <div
-      className={`${showHideClassName}  w-full right-0 absolute top-0 md:top-2 md:right-8 sm:w-auto  z-50`}
+      className={`${showHideClassName}  w-full right-0 absolute top-0 md:top-2 md:right-8 sm:w-auto  z-50 min-w-400`}
     >
       {isEmpty ? (
-        <section className="bg-turquoise-default border-4 border-black  md:shadow-brutalist-lg">
+        <section className="bg-turquoise-default border-4 border-black  md:shadow-brutalist-lg ">
           <div className="flex flex-column justify-between border-b-2 border-black p">
             <h1 className="text-3xl font-bold p-2">YOUR CART</h1>
             <button onClick={() => setModal(false)} className="mx-4 text-xl">
@@ -152,7 +152,7 @@ const Modal = () => {
           </div>
         </section>
       ) : (
-        <section className="bg-turquoise-default border-4 border-black md:shadow-brutalist-lg">
+        <section className="bg-turquoise-default border-4 border-black md:shadow-brutalist-lg ">
           <div className="flex flex-column justify-between border-b-2 border-black">
             <h1 className="sm:text-xl md:text-2xl lg:text-3xl font-bold p-2">
               YOUR CART

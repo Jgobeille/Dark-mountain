@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import commerce from '@/lib/commerce'
 
@@ -8,7 +8,7 @@ import { useCartDispatch, useCartState } from '@/context/cart'
 import fetchShippingOptionsAndSubdivisions from '@/utils/fetchShippingOptionsAndSubdivisions'
 
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
+// import * as Yup from 'yup'
 
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 
