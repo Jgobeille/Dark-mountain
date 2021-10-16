@@ -32,8 +32,8 @@ export default async (req, res) => {
     }
 
     const msg = {
-      to: 'djent34@gmail.com',
-      from: 'djent34@gmail.com', // Use the email address or domain you verified above
+      to: 'patrickseta@gmail.com',
+      from: 'patrickseta@gmail.com', // Use the email address or domain you verified above
       subject: 'Commission Request',
       html: `
       <strong>Name: </strong><p>${body.name}</p>
